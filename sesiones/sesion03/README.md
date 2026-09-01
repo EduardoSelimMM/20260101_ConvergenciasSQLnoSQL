@@ -2,18 +2,20 @@
 
 Trabajaremos en https://onecompiler.com/
 
-SQL (relacional, centrado en tablas y esquemas rígidos) y MongoDB (NoSQL, centrado en documentos JSON y esquemas flexibles) partieron de filosofías opuestas
++ SQL (relacional, centrado en tablas y esquemas rígidos) y MongoDB (NoSQL, centrado en documentos JSON y esquemas flexibles) partieron de filosofías opuestas
 
-Han ido evolucionando para incorporar características del otro
++ Han ido evolucionando para incorporar características del otro
 
-| Etapa MongoDB | Cláusula SQL Equivalente | Propósito |
+| Etapa MongoDB | Cláusula SQL equivalente | Propósito |
 |---|---|---|
 | `$match` | `WHERE / HAVING` | Filtrar registros según condiciones |
 | `$project` | `SELECT` | Seleccionar, renombrar o calcular campos |
-| `$group` | `GROUP BY` | Agrupar datos y aplicar funciones (`$sum`, `$avg`) |
+| `$group` | `GROUP BY` | Agrupar datos y aplicar funciones de agrupación (`$sum`, `$avg`) |
 | `$sort` | `ORDER BY` | Ordenar resultados |
-| `$limit` / `$skip` | `LIMIT / OFFSET` | Paginación de resultados |
+| `$limit` / `$skip` | `LIMIT / OFFSET` | Seleccionar un subconjunto de resultados |
 | `$lookup` | `JOIN` | Combinar datos entre colecciones/tablas |
+
+
 
 
 Vamos a insertar 4 tablas pequeñas para esta sesión práctica/recordatorio
