@@ -6,6 +6,20 @@ Trabajaremos en https://onecompiler.com/
 
 + Han ido evolucionando para incorporar características del otro
 
++ El `Aggregation Pipeline` de MongoDB fue diseñado para replicar la expresividad de las transformaciones de SQL
+  + Con la ventaja de que además se hace mediante una sucesión de etapas
+
+| Etapa MongoDB | Cláusula SQL equivalente | Propósito |
+|---|---|---|
+| `$match` | `WHERE / HAVING` | Filtrar registros según condiciones |
+| `$project` | `SELECT` | Seleccionar, renombrar o calcular campos |
+| `$group` | `GROUP BY` | Agrupar datos y aplicar funciones de agrupación (`$sum`, `$avg`) |
+| `$sort` | `ORDER BY` | Ordenar resultados |
+| `$limit` / `$skip` | `LIMIT / OFFSET` | Seleccionar un subconjunto de resultados |
+| `$lookup` | `JOIN` | Combinar datos entre colecciones/tablas |
+
++ Pero también ha incorporado más...
+
 + La idea original tras el movimiento NoSQL (por ahí de finales de los 2000) era romper con el modelo ACID estricto de las bases de datos relacionales
 	+ Pues ACID impone limitaciones fuertes para escalar horizontalmente a miles de nodos
 
@@ -34,23 +48,6 @@ Tiende a abortar rápido en caso de conflicto de escritura para que la aplicaci�
 Los drivers modernos de MongoDB incluyen lógica de reintento automático para volver a intentar la transacción completa en caso de un conflicto transitorio de escritura
 
 OBVIAMENTE, se paga el precio: hay un impacto en la latencia gracias al seguimiento de la versión de los documentos (a.k.a snapshot memory) y la coordinación entre nodos en réplicas
-
-+ Pero también ha incorporado más...
-
-+ El `Aggregation Pipeline` de MongoDB fue diseñado para replicar la expresividad de las transformaciones de SQL
-  + Con la ventaja de que además se hace mediante una sucesión de etapas
-
-| Etapa MongoDB | Cláusula SQL equivalente | Propósito |
-|---|---|---|
-| `$match` | `WHERE / HAVING` | Filtrar registros según condiciones |
-| `$project` | `SELECT` | Seleccionar, renombrar o calcular campos |
-| `$group` | `GROUP BY` | Agrupar datos y aplicar funciones de agrupación (`$sum`, `$avg`) |
-| `$sort` | `ORDER BY` | Ordenar resultados |
-| `$limit` / `$skip` | `LIMIT / OFFSET` | Seleccionar un subconjunto de resultados |
-| `$lookup` | `JOIN` | Combinar datos entre colecciones/tablas |
-
-
-
 
 Vamos a insertar 4 tablas pequeñas para esta sesión práctica/recordatorio
 
