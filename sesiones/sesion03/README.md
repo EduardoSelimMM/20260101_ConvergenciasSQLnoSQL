@@ -926,7 +926,47 @@ db.products.aggregate([
     }
   }
 ])
+```
 
+Insertar
+
+```
+INSERT INTO customers (id, name, city, signup_date)
+VALUES (11, 'Valeria Núñez', 'CDMX', '2024-05-01');
+```
+
+```
+db.customers.insertOne({
+  _id: 11, name: "Valeria Núñez", city: "CDMX", signup_date: "2024-05-01"
+})
+```
+
+Actualizar
+
+```
+UPDATE products SET price = 380.00 WHERE id = 2;
+```
+
+```
+db.products.updateOne({ _id: 2 }, { $set: { price: 380.00 } })
+```
+
+```
+UPDATE orders SET status = 'shipped' WHERE status = 'pending';
+```
+
+```
+db.orders.updateMany({ status: "pending" }, { $set: { status: "shipped" } })
+```
+
+Eliminar
+
+```
+DELETE FROM customers WHERE id = 11;
+```
+
+```
+db.customers.deleteOne({ _id: 11 })
 ```
 
 ## Más de GROUP BY con HAVING
