@@ -587,6 +587,13 @@ db.customers.find().sort({ name: 1 }).limit(3);
 
 + OJO: El .sort() se incluye el nombre del campo y 1 para ascendente o -1 para descendente
 
+```
+SELECT * FROM products ORDER BY price DESC LIMIT 3;
+```
+
+```
+db.products.find().sort({ price: -1 }).limit(3)
+```
 
 Agrupación y funciones de Agregación
 
@@ -638,4 +645,23 @@ db.customers.aggregate([
     }
   }
 ]);
+```
+
++ Aunque contar es muy importante
+
+```
+SELECT COUNT(*) FROM orders WHERE status = 'cancelled';
+```
+
+```
+db.orders.countDocuments({ status: "cancelled" })
+```
+
+```
+SELECT DISTINCT category FROM products;
+
+```
+
+```
+db.products.distinct("category")
 ```
