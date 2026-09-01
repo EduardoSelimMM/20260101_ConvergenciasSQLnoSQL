@@ -1,7 +1,5 @@
 # Sesión 3: 1 de septiembre de 2026 😃
 
-Trabajaremos en https://onecompiler.com/
-
 + SQL (relacional, centrado en tablas y esquemas rígidos) y MongoDB (NoSQL, centrado en documentos JSON y esquemas flexibles) partieron de filosofías opuestas
 
 + Han ido evolucionando para incorporar características del otro
@@ -84,6 +82,8 @@ En SQL se exige un esquema predefinido (CREATE TABLE) antes de insertar cualquie
 Aunque MongoDB es esencialmente schema-less (sin esquema fijo), ofrece JSON Schema Validation
 
 Con éste se definen reglas de validación en la colección para garantizar que los documentos insertados cumplan con tipos de datos o campos obligatorios
+
+Trabajaremos en https://onecompiler.com/
 
 Vamos a insertar 4 tablas pequeñas para esta sesión práctica/recordatorio
 
