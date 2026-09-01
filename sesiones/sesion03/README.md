@@ -6,6 +6,35 @@ Trabajaremos en https://onecompiler.com/
 
 + Han ido evolucionando para incorporar características del otro
 
++ La idea original tras el movimiento NoSQL (por ahí de finales de los 2000) era romper con el modelo ACID estricto de las bases de datos relacionales
+	+ Pues ACID impone limitaciones fuertes para escalar horizontalmente a miles de nodos
+
++ Para resolver esto, NoSQL propuso cambiar el modelo ACID por el modelo BASE
+
++ Resulta que después de su versión 4.0 MongoDB permite lo que llamó "transacciones ACID multidocumento"
+
++ Si el objetivo era evitar ACID, ¿por qué lo terminaron agregando?
+
++ Para competir con PostgreSQL, Oracle o SQL Server 
+
++ En aplicaciones financieras, de e-commerce, salud, etc los clientes exigían garantías ACID explícitas
+
++ Bases de datos relacionales tradicionales -> suelen utilizar bloqueos pesados de tablas o filas (pessimistic locking)
+
++ MongoDB utiliza OCC (Optimistic Concurrecy Control) a través de su motor de almacenamiento WiredTiger
+
+Cuando la transacción modifica documentos, intenta bloquear a nivel de documento al momento de escribir
+
+Si dos transacciones simultáneas intentan modificar el mismo documento al mismo tiempo, se produce un write conflict
+
+La transacción que perdió la carrera falla inmediatamente y MongoDB lanza un error de tipo `TransientTransactionError`
+
+Tiende a abortar rápido en caso de conflicto de escritura para que la aplicación reintente.
+
+Los drivers modernos de MongoDB incluyen lógica de reintento automático para volver a intentar la transacción completa en caso de un conflicto transitorio de escritura
+
+OBVIAMENTE, se paga el precio: hay un impacto en la latencia gracias al seguimiento de la versión de los documentos (a.k.a snapshot memory) y la coordinación entre nodos en réplicas
+
 + Específicamente el `Aggregation Pipeline` de MongoDB fue diseñado para replicar la expresividad de las transformaciones de SQL
   + Con la ventaja de que además se hace mediante una sucesión de etapas
 
