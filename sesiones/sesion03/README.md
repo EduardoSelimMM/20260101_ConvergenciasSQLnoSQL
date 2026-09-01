@@ -47,9 +47,39 @@ Tiende a abortar rápido en caso de conflicto de escritura para que la aplicaci�
 
 Los drivers modernos de MongoDB incluyen lógica de reintento automático para volver a intentar la transacción completa en caso de un conflicto transitorio de escritura
 
+¿Esto significa  que MongoDB ahora se "detiene" como una SQL tradicional?
+
+No exactamente
+
+MongoDB implementó ACID multidocumento sin destruir su capacidad de escalado
+
+Se debe principalmente a tres decisiones de diseño:
+
+Es Opt-In (bajo demanda):
+
+SQL -> prácticamente cualquier bloque BEGIN...COMMIT ejecuta una transacción tradicional
+
+MongoDB el camino por defecto sigue siendo NoSQL/BASE (escrituras sencillas o embebidas de alta velocidad sin sobrecosto de transacción).
+
+OCC:
+
+En lugar de "detener el sistema" o bloquear filas esperando que terminen las consultas (como hace el bloqueo pesimista en SQL)
+
+Permite que las transacciones avancen. Si al momento de hacer el commit detecta que otro proceso modificó el mismo documento, simplemente aborta la transacción entrante y deja que la aplicación la reintente
+
+Snapshot isolation:
+
+Las transacciones leen una captura estática de los datos en el tiempo (snapshot). Esto permite que las lecturas de otros usuarios continúen a velocidad normal sin quedar bloqueadas por una transacción en curso
+
+Hoy en día, la división rígida "SQL = ACID" vs "NoSQL = BASE" ha desaparecido
+
+NoSQL (e.g. MongoDB, DynamoDB): Nacieron orientadas a alta disponibilidad y escalabilidad horizontal (BASE), pero añadieron soporte ACID opcional para casos de uso específicos
+
+NewSQL (e.g. CockroachDB): Diseñada desde cero para ofrecer SQL estándar y ACID estricto, pero sobre arquitecturas distribuidas y escalables horizontalmente
+
 OBVIAMENTE, se paga el precio: hay un impacto en la latencia gracias al seguimiento de la versión de los documentos (a.k.a snapshot memory) y la coordinación entre nodos en réplicas
 
-En SQL se exige un esquema predefinido (CREATE TABLE) antes de insertar cualquier dato.
+En SQL se exige un esquema predefinido (CREATE TABLE) antes de insertar cualquier dato
 
 Aunque MongoDB es esencialmente schema-less (sin esquema fijo), ofrece JSON Schema Validation
 
