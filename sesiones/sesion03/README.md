@@ -259,6 +259,83 @@ db.products.insertMany([
 ```
 
 ```
+db.orders.insertMany([
+  {
+    "_id": 1,
+    "customer_id": 1,
+    "order_date": "2024-01-10",
+    "status": "shipped"
+  },
+  {
+    "_id": 2,
+    "customer_id": 2,
+    "order_date": "2024-01-12",
+    "status": "shipped"
+  },
+  {
+    "_id": 3,
+    "customer_id": 1,
+    "order_date": "2024-02-01",
+    "status": "cancelled"
+  },
+  {
+    "_id": 4,
+    "customer_id": 3,
+    "order_date": "2024-02-14",
+    "status": "shipped"
+  },
+  {
+    "_id": 5,
+    "customer_id": 4,
+    "order_date": "2024-02-20",
+    "status": "pending"
+  },
+  {
+    "_id": 6,
+    "customer_id": 5,
+    "order_date": "2024-03-01",
+    "status": "shipped"
+  },
+  {
+    "_id": 7,
+    "customer_id": 2,
+    "order_date": "2024-03-05",
+    "status": "cancelled"
+  },
+  {
+    "_id": 8,
+    "customer_id": 6,
+    "order_date": "2024-03-10",
+    "status": "shipped"
+  },
+  {
+    "_id": 9,
+    "customer_id": 7,
+    "order_date": "2024-03-15",
+    "status": "pending"
+  },
+  {
+    "_id": 10,
+    "customer_id": 8,
+    "order_date": "2024-04-01",
+    "status": "shipped"
+  },
+  {
+    "_id": 11,
+    "customer_id": 1,
+    "order_date": "2024-04-10",
+    "status": "shipped"
+  },
+  {
+    "_id": 12,
+    "customer_id": 9,
+    "order_date": "2024-04-15",
+    "status": "cancelled"
+  }
+])
+```
+
+```
 db.order_items.insertMany([
   {
     "_id": 1,
