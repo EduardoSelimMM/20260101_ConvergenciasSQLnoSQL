@@ -2,6 +2,7 @@
 
 Trabajaremos
 
+```
 DROP TABLE IF EXISTS order_items;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS products;
@@ -34,4 +35,4 @@ CREATE TABLE order_items (
     product_id INTEGER NOT NULL REFERENCES products(id),
     quantity   INTEGER NOT NULL
 );
- 
+```
