@@ -548,6 +548,14 @@ db.customers.find({
 db.customers.find({ city: { $in: ["CDMX", "Monterrey"] } });
 ```
 
+```
+SELECT * FROM orders WHERE status IN ('shipped', 'pending');
+```
+
+```
+db.orders.find({ status: { $in: ["shipped", "pending"] } })
+```
+
 Ordenamientos y límites
 
 + En SQL, con `ORDER BY` y `LIMIT`
