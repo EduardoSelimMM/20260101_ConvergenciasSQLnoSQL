@@ -112,3 +112,77 @@ INSERT INTO order_items (id, order_id, product_id, quantity) VALUES
 (19, 12, 4, 1);
 ```
 
++ Recuérdese que en MongoDB no existe el concepto de "esquemas" (`CREATE TABLE`) ni se usan sentencias `INSERT INTO`
+
++ Acá se usan colecciones y documentos JSON/BSON
+
++ No necesitas crear la colección manualmente
+
++ MongoDB la crea automáticamente al insertar el primer documento
+
++ Acá se utiliza el comando `insertMany` sobre la colección `customers`
+
+```
+db.customers.insertMany([
+  {
+    _id: 1,
+    name: "Ana García",
+    city: "CDMX",
+    signup_date: ISODate("2023-01-15T00:00:00Z")
+  },
+  {
+    _id: 2,
+    name: "Luis Fernández",
+    city: "Guadalajara",
+    signup_date: ISODate("2023-02-20T00:00:00Z")
+  },
+  {
+    _id: 3,
+    name: "Marta López",
+    city: "Monterrey",
+    signup_date: ISODate("2023-03-05T00:00:00Z")
+  },
+  {
+    _id: 4,
+    name: "Carlos Ruiz",
+    city: "CDMX",
+    signup_date: ISODate("2023-03-18T00:00:00Z")
+  },
+  {
+    _id: 5,
+    name: "Sofía Torres",
+    city: "Puebla",
+    signup_date: ISODate("2023-04-02T00:00:00Z")
+  },
+  {
+    _id: 6,
+    name: "Jorge Díaz",
+    city: "Guadalajara",
+    signup_date: ISODate("2023-05-10T00:00:00Z")
+  },
+  {
+    _id: 7,
+    name: "Elena Morales",
+    city: "CDMX",
+    signup_date: ISODate("2023-06-01T00:00:00Z")
+  },
+  {
+    _id: 8,
+    name: "Pedro Sánchez",
+    city: "Querétaro",
+    signup_date: ISODate("2023-06-15T00:00:00Z")
+  },
+  {
+    _id: 9,
+    name: "Lucía Romero",
+    city: "Monterrey",
+    signup_date: ISODate("2023-07-22T00:00:00Z")
+  },
+  {
+    _id: 10,
+    name: "Diego Castro",
+    city: "CDMX",
+    signup_date: ISODate("2023-08-30T00:00:00Z")
+  }
+]);
+```
