@@ -1,6 +1,6 @@
 # Sesión 3: 1 de septiembre de 2026 😃
 
-+ SQL (relacional, centrado en tablas y esquemas rígidos) y MongoDB (NoSQL, centrado en documentos JSON y esquemas flexibles) partieron de filosofías opuestas
++ SQL (relacional, centrado en tablas y esquemas rígidos) y MongoDB (NoSQL, centrado en documentos JSON y esquemas flexibles) partieron de filosofías diferentes
 
 + Han ido evolucionando para incorporar características del otro
 
