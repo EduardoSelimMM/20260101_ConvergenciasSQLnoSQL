@@ -49,6 +49,12 @@ Los drivers modernos de MongoDB incluyen lógica de reintento automático para v
 
 OBVIAMENTE, se paga el precio: hay un impacto en la latencia gracias al seguimiento de la versión de los documentos (a.k.a snapshot memory) y la coordinación entre nodos en réplicas
 
+En SQL se exige un esquema predefinido (CREATE TABLE) antes de insertar cualquier dato.
+
+Aunque MongoDB es esencialmente schema-less (sin esquema fijo), ofrece JSON Schema Validation
+
+Con éste se definen reglas de validación en la colección para garantizar que los documentos insertados cumplan con tipos de datos o campos obligatorios
+
 Vamos a insertar 4 tablas pequeñas para esta sesión práctica/recordatorio
 
 ```
