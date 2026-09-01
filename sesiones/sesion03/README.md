@@ -7,7 +7,7 @@ Trabajaremos en https://onecompiler.com/
 + Han ido evolucionando para incorporar características del otro
 
 + Específicamente el `Aggregation Pipeline` de MongoDB fue diseñado para replicar la expresividad de las transformaciones de SQL
- + Con la ventaja de que además se hace mediante una secuencia de etapas operativas
+  + Con la ventaja de que además se hace mediante una secuencia de etapas operativas
 
 | Etapa MongoDB | Cláusula SQL equivalente | Propósito |
 |---|---|---|
