@@ -665,3 +665,162 @@ SELECT DISTINCT category FROM products;
 ```
 db.products.distinct("category")
 ```
+
+## Uniones
+
++ En SQL, JOIN
+
++ En Mongo, $lookup
+
++ En MongoDB, para establecer relaciones se utiliza la etapa $lookup dentro del Aggregation Framework.
+
++ Por ejemplo, si se quisieran los pedidos con el nombre del cliente
+
+```{sql}
+SELECT o.id, c.name, o.order_date, o.status
+FROM orders o
+JOIN customers c ON c.id = o.customer_id;
+```
+
+```
+db.orders.aggregate([
+  {
+    $lookup: {
+      from: "customers",
+      localField: "customer_id",
+      foreignField: "_id",
+      as: "customer"
+    }
+  },
+  { $unwind: "$customer" }, // $unwind convierte el arreglo 'customer' en documentos individuales
+  {
+    $project: {
+      order_date: 1, status: 1,
+      customer_name: "$customer.name"
+    }
+  }
+])
+```
+
++ Otro ejemplo: Obtener todos los clientes y sus órdenes si existen
+
+```
+SELECT c.name, c.city, o.order_date, o.status
+FROM customers c
+LEFT JOIN orders o ON c.id = o.customer_id;
+```
+
+```
+db.customers.aggregate([
+  {
+    $lookup: {
+      from: "orders",
+      localField: "_id",
+      foreignField: "customer_id",
+      as: "orders"
+    }
+  }
+]);
+
+```
+
++ Otro ejemplo: Se quiere sólo clientes que tengan al menos una orden
+
+```
+SELECT c.name, o.order_date, o.status
+FROM customers c
+INNER JOIN orders o ON c.id = o.customer_id;
+
+```
+
+```
+db.customers.aggregate([
+  {
+    $lookup: {
+      from: "orders",
+      localField: "_id",
+      foreignField: "customer_id",
+      as: "order_details"
+    }
+  },
+  {
+    $unwind: "$order_details" // $unwind convierte el arreglo 'order_details' en documentos individuales
+  },
+  // Opcional: Proyección para aplanar y formatear la salida
+  {
+    $project: {
+      _id: 0,
+      customer_name: "$name",
+      amount: "$order_details.amount",
+      status: "$order_details.status"
+    }
+  }
+]);
+
+```
+
++ Otro ejemplo: Se quiere a los clientes sin pedidos
+
+```
+SELECT c.name
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id
+WHERE o.id IS NULL;
+```
+
+```
+db.customers.aggregate([
+  {
+    $lookup: {
+      from: "orders",
+      localField: "_id",
+      foreignField: "customer_id",
+      as: "orders"
+    }
+  },
+  { $match: { orders: { $size: 0 } } },
+  { $project: { name: 1, _id: 0 } }
+])
+```
+
++ Otro ejemplo: Detalle completo de la orden con id = 10
+
+```
+SELECT o.id AS order_id, p.name, oi.quantity, p.price
+FROM orders o
+JOIN order_items oi ON oi.order_id = o.id
+JOIN products p ON p.id = oi.product_id
+WHERE o.id = 10;
+```
+
+```
+db.orders.aggregate([
+  { $match: { _id: 10 } },
+  {
+    $lookup: {
+      from: "order_items",
+      localField: "_id",
+      foreignField: "order_id",
+      as: "items"
+    }
+  },
+  { $unwind: "$items" },
+  {
+    $lookup: {
+      from: "products",
+      localField: "items.product_id",
+      foreignField: "_id",
+      as: "product"
+    }
+  },
+  { $unwind: "$product" },
+  {
+    $project: {
+      order_id: "$_id",
+      name: "$product.name",
+      quantity: "$items.quantity",
+      price: "$product.price"
+    }
+  }
+])
+```
