@@ -682,7 +682,7 @@ FROM orders o
 JOIN customers c ON c.id = o.customer_id;
 ```
 
-```
+```javascript
 db.orders.aggregate([
   {
     $lookup: {
