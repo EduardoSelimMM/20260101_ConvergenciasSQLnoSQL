@@ -26,7 +26,7 @@ CREATE TABLE orders (
     id           INTEGER PRIMARY KEY,
     customer_id  INTEGER NOT NULL REFERENCES customers(id),
     order_date   DATE,
-    status       VARCHAR(20) -- pending | shipped | cancelled
+    status       VARCHAR(20)
 );
  
 CREATE TABLE order_items (
