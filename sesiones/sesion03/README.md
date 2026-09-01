@@ -508,6 +508,14 @@ db.customers.find({
 });
 ```
 
+```
+SELECT * FROM customers WHERE name LIKE 'A%';
+```
+
+```
+db.customers.find({ name: { $regex: "^A" } })
+```
+
 Filtros con más de una condición
 
 + En SQL se usa AND y/o OR
@@ -524,6 +532,14 @@ db.customers.find({
   city: "CDMX",
   signup_date: { $gte: ISODate("2023-06-01T00:00:00Z") }
 });
+```
+
+```
+SELECT * FROM products WHERE category = 'Electrónica' AND price < 1000;
+```
+
+```
+db.products.find({ category: "Electrónica", price: { $lt: 1000 } })
 ```
 
 ```
