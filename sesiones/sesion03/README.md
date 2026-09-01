@@ -41,7 +41,7 @@ CREATE TABLE order_items (
 
 ```
 -- ---------------------------------------------------------
--- CUSTOMERS (10)
+-- CUSTOMERS
 -- ---------------------------------------------------------
 INSERT INTO customers (id, name, city, signup_date) VALUES
 (1,  'Ana García',      'CDMX',        '2023-01-15'),
@@ -56,7 +56,7 @@ INSERT INTO customers (id, name, city, signup_date) VALUES
 (10, 'Diego Castro',    'CDMX',        '2023-08-30');
  
 -- ---------------------------------------------------------
--- PRODUCTS (10)
+-- PRODUCTS
 -- ---------------------------------------------------------
 INSERT INTO products (id, name, category, price) VALUES
 (1,  'Laptop Pro 15',        'Electrónica', 18500.00),
@@ -71,7 +71,7 @@ INSERT INTO products (id, name, category, price) VALUES
 (10, 'Webcam HD',            'Electrónica',   700.00);
  
 -- ---------------------------------------------------------
--- ORDERS (12)
+-- ORDERS
 -- ---------------------------------------------------------
 INSERT INTO orders (id, customer_id, order_date, status) VALUES
 (1,  1, '2024-01-10', 'shipped'),
@@ -88,7 +88,7 @@ INSERT INTO orders (id, customer_id, order_date, status) VALUES
 (12, 9, '2024-04-15', 'cancelled');
  
 -- ---------------------------------------------------------
--- ORDER_ITEMS (19)
+-- ORDER_ITEMS
 -- ---------------------------------------------------------
 INSERT INTO order_items (id, order_id, product_id, quantity) VALUES
 (1,  1,  1, 1),
@@ -191,7 +191,191 @@ db.customers.insertMany([
 
 + En MongoDB es `_id`. Si no lo defines, MongoDB genera un `ObjectId` automático de 12 bytes
 
-+ ESPECIFICO para los datos de esta tabla: Se utiliza la función `ISODate("YYYY-MM-DD")` para almacenar la fecha como un tipo de dato nativo `BSON Date en lugar de una simple cadena de texto
++ ESPECIFICO para los datos de esta tabla: Se utiliza la función `ISODate("YYYY-MM-DD")` para almacenar la fecha como un tipo de dato nativo `BSON Date` en lugar de una simple cadena de texto
+
+```
+db.products.insertMany([
+  {
+    "_id": 1,
+    "name": "Laptop Pro 15",
+    "category": "Electrónica",
+    "price": 18500.0
+  },
+  {
+    "_id": 2,
+    "name": "Mouse Inalámbrico",
+    "category": "Electrónica",
+    "price": 350.0
+  },
+  {
+    "_id": 3,
+    "name": "Teclado Mecánico",
+    "category": "Electrónica",
+    "price": 1200.0
+  },
+  {
+    "_id": 4,
+    "name": "Silla Ergonómica",
+    "category": "Oficina",
+    "price": 3200.0
+  },
+  {
+    "_id": 5,
+    "name": "Escritorio Ajustable",
+    "category": "Oficina",
+    "price": 5400.0
+  },
+  {
+    "_id": 6,
+    "name": "Monitor 27\"",
+    "category": "Electrónica",
+    "price": 4800.0
+  },
+  {
+    "_id": 7,
+    "name": "Lámpara LED",
+    "category": "Oficina",
+    "price": 450.0
+  },
+  {
+    "_id": 8,
+    "name": "Audífonos Bluetooth",
+    "category": "Electrónica",
+    "price": 900.0
+  },
+  {
+    "_id": 9,
+    "name": "Organizador de Cables",
+    "category": "Oficina",
+    "price": 150.0
+  },
+  {
+    "_id": 10,
+    "name": "Webcam HD",
+    "category": "Electrónica",
+    "price": 700.0
+  }
+])
+```
+
+```
+db.order_items.insertMany([
+  {
+    "_id": 1,
+    "order_id": 1,
+    "product_id": 1,
+    "quantity": 1
+  },
+  {
+    "_id": 2,
+    "order_id": 1,
+    "product_id": 2,
+    "quantity": 2
+  },
+  {
+    "_id": 3,
+    "order_id": 2,
+    "product_id": 4,
+    "quantity": 1
+  },
+  {
+    "_id": 4,
+    "order_id": 2,
+    "product_id": 5,
+    "quantity": 1
+  },
+  {
+    "_id": 5,
+    "order_id": 3,
+    "product_id": 6,
+    "quantity": 1
+  },
+  {
+    "_id": 6,
+    "order_id": 4,
+    "product_id": 3,
+    "quantity": 2
+  },
+  {
+    "_id": 7,
+    "order_id": 4,
+    "product_id": 9,
+    "quantity": 3
+  },
+  {
+    "_id": 8,
+    "order_id": 5,
+    "product_id": 1,
+    "quantity": 1
+  },
+  {
+    "_id": 9,
+    "order_id": 6,
+    "product_id": 7,
+    "quantity": 4
+  },
+  {
+    "_id": 10,
+    "order_id": 6,
+    "product_id": 8,
+    "quantity": 1
+  },
+  {
+    "_id": 11,
+    "order_id": 7,
+    "product_id": 2,
+    "quantity": 1
+  },
+  {
+    "_id": 12,
+    "order_id": 8,
+    "product_id": 6,
+    "quantity": 2
+  },
+  {
+    "_id": 13,
+    "order_id": 8,
+    "product_id": 10,
+    "quantity": 1
+  },
+  {
+    "_id": 14,
+    "order_id": 9,
+    "product_id": 5,
+    "quantity": 1
+  },
+  {
+    "_id": 15,
+    "order_id": 10,
+    "product_id": 1,
+    "quantity": 1
+  },
+  {
+    "_id": 16,
+    "order_id": 10,
+    "product_id": 6,
+    "quantity": 1
+  },
+  {
+    "_id": 17,
+    "order_id": 10,
+    "product_id": 3,
+    "quantity": 1
+  },
+  {
+    "_id": 18,
+    "order_id": 11,
+    "product_id": 8,
+    "quantity": 2
+  },
+  {
+    "_id": 19,
+    "order_id": 12,
+    "product_id": 4,
+    "quantity": 1
+  }
+])
+```
 
 ## Operaciones básicas
 
