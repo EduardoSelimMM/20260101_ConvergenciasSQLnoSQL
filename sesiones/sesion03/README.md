@@ -666,7 +666,7 @@ SELECT DISTINCT category FROM products;
 db.products.distinct("category")
 ```
 
-## Uniones
+## JOINS
 
 + En SQL, JOIN
 
