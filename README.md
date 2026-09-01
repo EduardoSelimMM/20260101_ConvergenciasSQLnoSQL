@@ -7,5 +7,5 @@
 + Sábado: 9:00 a 10:00 hrs. En línea + 10:00 a 12:00 asíncronas
 
 ## Sesiones 
-- [Sesion 3: 1 de septiembre de 2026](./sesiones/sesion01)
+- [Sesion 3: 1 de septiembre de 2026](./sesiones/sesion03)
 - [Sesion 4: 3 de septiembre de 2026](./sesion02)
