@@ -35,7 +35,9 @@ Los drivers modernos de MongoDB incluyen lógica de reintento automático para v
 
 OBVIAMENTE, se paga el precio: hay un impacto en la latencia gracias al seguimiento de la versión de los documentos (a.k.a snapshot memory) y la coordinación entre nodos en réplicas
 
-+ Específicamente el `Aggregation Pipeline` de MongoDB fue diseñado para replicar la expresividad de las transformaciones de SQL
++ Pero también ha incorporado más...
+
++ El `Aggregation Pipeline` de MongoDB fue diseñado para replicar la expresividad de las transformaciones de SQL
   + Con la ventaja de que además se hace mediante una sucesión de etapas
 
 | Etapa MongoDB | Cláusula SQL equivalente | Propósito |
