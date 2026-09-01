@@ -1,4 +1,4 @@
-# Sesión 3: 1 de septiembre de 2026
+# Sesión 3: 1 de septiembre de 2026 😃
 
 Trabajaremos en https://onecompiler.com/
 
