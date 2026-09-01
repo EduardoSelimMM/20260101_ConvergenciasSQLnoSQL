@@ -824,3 +824,109 @@ db.orders.aggregate([
   }
 ])
 ```
+
+## Más sobre GROUP BY y funciones de agregación
+
+```
+SELECT category, AVG(price) AS avg_price, COUNT(*) AS n
+FROM products
+GROUP BY category;
+```
+
+```
+db.products.aggregate([
+  {
+    $group: {
+      _id: "$category",
+      avg_price: { $avg: "$price" },
+      n: { $sum: 1 }
+    }
+  }
+])
+
+```
+
+## Más de GROUP BY con HAVING
+
+```
+SELECT customer_id, COUNT(*) AS total_orders
+FROM orders
+GROUP BY customer_id
+HAVING COUNT(*) > 1;
+```
+
+```
+db.orders.aggregate([
+  { $group: { _id: "$customer_id", total_orders: { $sum: 1 } } },
+  { $match: { total_orders: { $gt: 1 } } }
+])
+```
+
++ En Mongo HAVING no existe como palabra es simplemente un $match después del $group, porque el pipeline ya filtró/transformó los datos en ese punto
+
+## Subconsultas
+
++ Ejemplo: Clientes que compraron el producto 1
+
+```
+SELECT name FROM customers
+WHERE id IN (
+  SELECT o.customer_id
+  FROM orders o
+  JOIN order_items oi ON oi.order_id = o.id
+  WHERE oi.product_id = 1
+);
+```
+
+```
+const customerIds = db.orders.aggregate([
+  {
+    $lookup: {
+      from: "order_items",
+      localField: "_id",
+      foreignField: "order_id",
+      as: "items"
+    }
+  },
+  { $unwind: "$items" },
+  { $match: { "items.product_id": 1 } },
+  { $group: { _id: "$customer_id" } }
+]).toArray().map(d => d._id);
+
+db.customers.find({ _id: { $in: customerIds } })
+```
+
++ Mongo también permite subconsultas relacionadas dentro del mismo pipeline con $lookup y `pipeline`
+
+## Unión
+
+Ejemplo: Clientes sin pedidos UNION clientes con algún pedido cancelado
+
+```
+SELECT name FROM customers
+WHERE id NOT IN (SELECT customer_id FROM orders)
+UNION
+SELECT DISTINCT c.name
+FROM customers c
+JOIN orders o ON o.customer_id = c.id
+WHERE o.status = 'cancelled';
+```
+
+```
+db.customers.aggregate([
+  {
+    $lookup: { from: "orders", localField: "_id", foreignField: "customer_id", as: "orders" }
+  },
+  {
+    $match: {
+      $or: [
+        { orders: { $size: 0 } },
+        { "orders.status": "cancelled" }
+      ]
+    }
+  },
+  { $project: { name: 1, _id: 0 } }
+])
+```
+
++ Nota: Mongo tiene un $unionWith real para combinar dos pipelines distintos, útil cuando las fuentes son colecciones diferentes. Aquí el $or es más directo porque es la misma colección.
