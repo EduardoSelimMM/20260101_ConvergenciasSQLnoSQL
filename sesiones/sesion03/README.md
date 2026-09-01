@@ -6,13 +6,14 @@ SQL (relacional, centrado en tablas y esquemas rígidos) y MongoDB (NoSQL, centr
 
 Han ido evolucionando para incorporar características del otro
 
-Etapa MongoDB,Cláusula SQL Equivalente,Propósito
-$match,WHERE / HAVING,Filtrar registros según condiciones
-$project,SELECT,"Seleccionar, renombrar o calcular campos"
-$group,GROUP BY,"Agrupar datos y aplicar funciones ($sum, $avg)"
-$sort,ORDER BY,Ordenar resultados
-$limit / $skip,LIMIT / OFFSET,Paginación de resultados
-$lookup,JOIN,Combinar datos entre colecciones/tablas
+| Etapa MongoDB | Cláusula SQL Equivalente | Propósito |
+|---|---|---|
+| `$match` | `WHERE / HAVING` | Filtrar registros según condiciones |
+| `$project` | `SELECT` | Seleccionar, renombrar o calcular campos |
+| `$group` | `GROUP BY` | Agrupar datos y aplicar funciones (`$sum`, `$avg`) |
+| `$sort` | `ORDER BY` | Ordenar resultados |
+| `$limit` / `$skip` | `LIMIT / OFFSET` | Paginación de resultados |
+| `$lookup` | `JOIN` | Combinar datos entre colecciones/tablas |
 
 
 Vamos a insertar 4 tablas pequeñas para esta sesión práctica/recordatorio
