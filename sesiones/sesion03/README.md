@@ -35,7 +35,7 @@ Trabajaremos en https://onecompiler.com/
 
 + Bases de datos relacionales tradicionales -> suelen utilizar bloqueos pesados de tablas o filas (pessimistic locking)
 
-+ MongoDB utiliza OCC (Optimistic Concurrecy Control) a través de su motor de almacenamiento WiredTiger
++ MongoDB utiliza OCC (Optimistic Concurrecy Control) a través de su motor de almacenamiento
 
 Cuando la transacción modifica documentos, intenta bloquear a nivel de documento al momento de escribir
 
