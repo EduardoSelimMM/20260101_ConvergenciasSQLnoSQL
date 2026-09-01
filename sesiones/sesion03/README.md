@@ -186,3 +186,171 @@ db.customers.insertMany([
   }
 ]);
 ```
+
++ Acá tampoco existe el concepto de "llave primaria" (PRIMARY KEY), acá existen IDs
+
++ En MongoDB es `_id`. Si no lo defines, MongoDB genera un `ObjectId` automático de 12 bytes
+
++ ESPECIFICO para los datos de esta tabla: Se utiliza la función `ISODate("YYYY-MM-DD")` para almacenar la fecha como un tipo de dato nativo `BSON Date en lugar de una simple cadena de texto
+
+## Operaciones básicas
+
++ En SQL: lectura (`SELECT`), filtrado (`WHERE`) y agrupación (`GROUP BY`)
+
++ En MongoDB: `.find()` y `.aggregate()`
+
+```
+SELECT * FROM customers;
+```
+
+```
+db.customers.find();
+```
+
+Proyección (a.k.a elegir qué columnas devolver)
+
++ En SQL defines los campos en la lista del SELECT
+
+```
+SELECT name, city FROM customers;
+```
+
++ En MongoDB pasas un segundo objeto al `.find()` donde 1 significa incluir el campo y 0 lo excluye
+
+```
+db.customers.find({}, { name: 1, city: 1, _id: 0 });
+```
+
+OJO: El `_id` se incluye por defecto. En este mini ejemplo lo excluimos explícitamente con 0
+
+Filtros simples
+
++ En SQL con `WHERE`
+
+```
+SELECT * FROM customers WHERE city = 'CDMX';
+```
+
++ En MongoDB las condiciones de comparación usan operadores como $eq (igual), $gt (mayor que), $gte (mayor o igual que), $lt (menor que) y $ne (no igual)
+
+```
+db.customers.find({ city: "CDMX" });
+```
+
+```
+SELECT * FROM customers WHERE signup_date >= '2023-05-01';
+```
+
+```
+db.customers.find({
+  signup_date: { $gte: ISODate("2023-05-01T00:00:00Z") }
+});
+```
+
+Filtros con más de una condición
+
++ En SQL se usa AND y/o OR
+
+```
+SELECT * FROM customers WHERE city = 'CDMX' AND signup_date >= '2023-06-01';
+
+```
+
++ En MongoDB en vez de usar `AND`, se logra incluyen varias condiciones dentro del mismo objeto de filtro
+
+```
+db.customers.find({
+  city: "CDMX",
+  signup_date: { $gte: ISODate("2023-06-01T00:00:00Z") }
+});
+```
+
+```
+SELECT * FROM customers WHERE city = 'CDMX' OR city = 'Monterrey';
+```
+
++ Para el `OR`, se utiliza el operador $or con un arreglo de condiciones
+
+
+```
+db.customers.find({
+  $or: [
+    { city: "CDMX" },
+    { city: "Monterrey" }
+  ]
+});
+```
+
++ Nota: También puedes usar el operador $in
+
+```
+db.customers.find({ city: { $in: ["CDMX", "Monterrey"] } });
+```
+
+Ordenamientos y límites
+
++ En SQL, con `ORDER BY` y `LIMIT`
+
+```
+SELECT * FROM customers ORDER BY name ASC LIMIT 3;
+```
++ En MongoDB, con .sort() y .limit()
+
+```
+db.customers.find().sort({ name: 1 }).limit(3);
+```
+
++ OJO: El .sort() se incluye el nombre del campo y 1 para ascendente o -1 para descendente
+
+
+Agrupación y funciones de Agregación
+
++ En SQL, con GROUP BY
+
+```
+SELECT city, COUNT(*) AS total_customers 
+FROM customers 
+GROUP BY city;
+```
+
++ En MongoDB, las agrupaciones se procesan con lo que se conoce como Aggregation Framework con la función aggregate(), usando etapas como $match (equivalente a WHERE/HAVING) y $group (equivalente a GROUP BY).
+
+```
+db.customers.aggregate([
+  {
+    $group: {
+      _id: "$city",                 // El campo con el que se agrupa
+      total_customers: { $sum: 1 }  // Cuenta la cantidad de documentos
+    }
+  }
+]);
+```
+
+```
+SELECT city, COUNT(*) AS total_customers 
+FROM customers 
+WHERE signup_date >= '2023-03-01'
+GROUP BY city
+HAVING total_customers >= 2;
+```
+
+```
+db.customers.aggregate([
+  {
+    $match: {
+      signup_date: { $gte: ISODate("2023-03-01T00:00:00Z") }
+    }
+  },
+  {
+    $group: {
+      _id: "$city",
+      total_customers: { $sum: 1 }
+    }
+  },
+  {
+    $match: {
+      total_customers: { $gte: 2 } // Filtra después de agrupar
+    }
+  }
+]);
+```
