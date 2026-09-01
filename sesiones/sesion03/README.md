@@ -676,7 +676,7 @@ db.products.distinct("category")
 
 + Por ejemplo, si se quisieran los pedidos con el nombre del cliente
 
-```{sql}
+```sql
 SELECT o.id, c.name, o.order_date, o.status
 FROM orders o
 JOIN customers c ON c.id = o.customer_id;
