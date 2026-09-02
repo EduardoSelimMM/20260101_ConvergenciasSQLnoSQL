@@ -102,11 +102,16 @@
 
 + Como ya sabemos que no hay un free lunch, OBVIAMENTE, se paga el precio: hay un impacto en la latencia gracias al seguimiento de la versión de los documentos (a.k.a snapshot memory) y la coordinación entre nodos en réplicas
 
-En SQL se exige un esquema predefinido (CREATE TABLE) antes de insertar cualquier dato
++ Pero aún hay más elementos que se han incorporado a MongoDB inspirados de SQL...
 
-Aunque MongoDB es esencialmente schema-less (sin esquema fijo), ofrece JSON Schema Validation
++ En SQL se exige un esquema predefinido (`CREATE TABLE`) (esto nos exige un diseño lógico estricto) antes de insertar cualquier dato
 
-Con éste se definen reglas de validación en la colección para garantizar que los documentos insertados cumplan con tipos de datos o campos obligatorios
++ La semana pasada, yo les dije que en mi experiencia Godin, muchos administradores de bases de datos, interpretaban el concepto de "esquema flexible" de MongoDB a "no estructura"... Meter todos los datos sin orden... Esto MongoDB también lo ha intentado arreglar
+
++ Aunque MongoDB es esencialmente schema-less (sin esquema fijo), se inventó el concepto de **JSON Schema Validation**
+	+ Con éste se definen reglas de validación en la colección para garantizar que los documentos insertados cumplan con tipos de datos o campos obligatorios
+ 	+ Se establece un conjunto de reglas para la estructura de los datos y si lo que quieres insertar no las cumple, no hace la inserción
+  	+ Como concepto es bonito, suena a que resuelve la situación que les conté... PEEEERO establecer un JSON Schema Validation **NO** es obligatorio y por supuesto, siempre existe la posibilidad de que ante una inserción que no puedes hacer, te creen otro JSV que tu documento si cumpla y listo!! Forzaste la inserción del documento. 
 
 Trabajaremos en https://onecompiler.com/
 
