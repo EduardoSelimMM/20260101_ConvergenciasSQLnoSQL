@@ -113,7 +113,30 @@
  	+ Se establece un conjunto de reglas para la estructura de los datos y si lo que quieres insertar no las cumple, no hace la inserción
   	+ Como concepto es bonito, suena a que resuelve la situación que les conté... PEEEERO establecer un JSON Schema Validation **NO** es obligatorio y por supuesto, siempre existe la posibilidad de que ante una inserción que no puedes hacer, te creen otro JSV que tu documento si cumpla y listo!! Forzaste la inserción del documento. 
 
-Trabajaremos en https://onecompiler.com/
+# Algunos detalles sobre el Aggregation Pipeline
+
++ Tiene la intención definir una sintaxis que replique algunas operaciones de SQL tanto como se pueda
+
++ Todo lo que vamos a revisar a continuación supone que los documentos de Mongo son muy sencillos y en realidad emulan el renglón de una tabla
+
+```
+renglón i -> |valor_campo1|valor_campo2|...|valor_campon|
+```
+
+La estructura de los documentos es
+
+```
+[{
+campo1: valor_campo1,
+campo2: valor_campo2,
+...
+campo_n: valor_campon
+}]
+```
+
++ Es decir no tenemos estructura de anidación
+
++ Trabajaremos en https://onecompiler.com/
 
 Vamos a insertar 4 tablas pequeñas para esta sesión práctica/recordatorio
 
