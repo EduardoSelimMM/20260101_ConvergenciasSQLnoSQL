@@ -44,64 +44,63 @@
 
 + Pero también ha incorporado más...
 
-+ La idea original tras el movimiento NoSQL (por ahí de finales de los 2000) era romper con el modelo ACID estricto de las bases de datos relacionales
-	+ Pues ACID impone limitaciones fuertes para escalar horizontalmente a miles de nodos
++ Según lo que vimos las sesiones pasadas. La idea original tras el movimiento **NoSQL** (por ahí de finales de los 2000) era tener una alternativa al modelo ACID estricto de las bases de datos relacionales
+	+ Pues ACID impone limitaciones fuertes para escalar horizontalmente a miles de nodos. Generalmente, alcanzar ACID requería "detener" el sistema y si éste está distribuido entre varios nodos pues se complica la cosa.
 
-+ Para resolver esto, NoSQL propuso cambiar el modelo ACID por el modelo BASE
++ Para resolver esto, NoSQL propuso cambiar el modelo ACID por el modelo **BASE**
 
-+ Resulta que después de su versión 4.0 MongoDB permite lo que llamó "transacciones ACID multidocumento"
++ Pues resulta se que todo lo que nos convencimos, medio dejó de importar
+
++ Después de su versión 4.0 MongoDB permite lo que llamó "transacciones ACID multidocumento" (es concepto propio de MongoDB, no es un concepto general como ACID). OJO: Es su propia versión de ACID (que por supuesto apunta a parecer a ACID puro, pero no lo es completamente)
 
 + Si el objetivo era evitar ACID, ¿por qué lo terminaron agregando?
 
-+ Para competir con PostgreSQL, Oracle o SQL Server 
++ Capitalismo voraz: Para competir con PostgreSQL, Oracle, SQL Server, etc. 
 
-+ En aplicaciones financieras, de e-commerce, salud, etc los clientes exigían garantías ACID explícitas
+	+ En aplicaciones financieras, de e-commerce, salud, etc; los **clientes exigían** garantías ACID explícitas para utilizar MongoDB como engine de base de datos.
 
-+ Bases de datos relacionales tradicionales -> suelen utilizar bloqueos pesados de tablas o filas (pessimistic locking)
++ Sin embargo, es una versión "barco" de ACID
 
-+ MongoDB utiliza OCC (Optimistic Concurrecy Control) a través de su motor de almacenamiento
++ Bases de datos relacionales tradicionales -> suelen utilizar bloqueos pesados de tablas o filas (pessimistic locking). Si la estructura no cuadra, no puedes hacer operaciones (principalmente inserciones)
 
-Cuando la transacción modifica documentos, intenta bloquear a nivel de documento al momento de escribir
++ MongoDB utiliza OCC (**Optimistic Concurrecy Control**) a través de su motor de almacenamiento
 
-Si dos transacciones simultáneas intentan modificar el mismo documento al mismo tiempo, se produce un write conflict
+	1. Cuando la transacción modifica documentos, intenta bloquear a nivel de documento al momento de escribir
 
-La transacción que perdió la carrera falla inmediatamente y MongoDB lanza un error de tipo `TransientTransactionError`
+	2. Esto hace que si dos transacciones simultáneas intentan modificar el mismo documento al mismo tiempo, se produce un **write conflict**
 
-Tiende a abortar rápido en caso de conflicto de escritura para que la aplicación reintente.
+	3. La transacción que perdió la carrera (i.e. la que llegó después) falla inmediatamente y MongoDB lanza un error de tipo `TransientTransactionError`
 
-Los drivers modernos de MongoDB incluyen lógica de reintento automático para volver a intentar la transacción completa en caso de un conflicto transitorio de escritura
++ Es decir, que OCC tiende a abortar rápido en caso de conflicto de escritura para que la aplicación reintente en otro momento.
 
-¿Esto significa  que MongoDB ahora se "detiene" como una SQL tradicional?
++ Los drivers modernos de MongoDB incluyen lógica de **reintento automático** (sin código "manual" para reintentarlo) para volver a intentar la transacción completa en caso de un conflicto transitorio de escritura. La transacción se logra cuando alguno de los reintentos lo logra.
 
-No exactamente
++ Seguramente se están preguntando ¿Esto significa que MongoDB ahora se "detiene" como SQL tradicional?
 
-MongoDB implementó ACID multidocumento sin destruir su capacidad de escalado
+	+ No exactamente
 
-Se debe principalmente a tres decisiones de diseño:
++ MongoDB implementó ACID multidocumento sin destruir su capacidad de escalado. Tiene que ver más con fierros (infraestructura) que con lógica
 
-Es Opt-In (bajo demanda):
++ Se debe principalmente a tres decisiones de diseño:
 
-SQL -> prácticamente cualquier bloque BEGIN...COMMIT ejecuta una transacción tradicional
++ **Primera decisión:** Es Opt-In (bajo demanda):
+	+ SQL -> prácticamente cualquier bloque BEGIN...COMMIT ejecuta una transacción tradicional
+ 	+ MongoDB el camino por defecto sigue siendo BASE (escrituras sencillas o embebidas de alta velocidad sin sobrecosto de transacción).
 
-MongoDB el camino por defecto sigue siendo NoSQL/BASE (escrituras sencillas o embebidas de alta velocidad sin sobrecosto de transacción).
++ **Segunda decisión:** OCC:
+	+ En lugar de "detener el sistema" o bloquear documentos esperando que terminen las consultas (como hace el bloqueo pesimista en SQL)
+	+ Permite que las transacciones avancen. Si al momento de hacer el commit detecta que otro proceso modificó el mismo documento, simplemente **aborta la transacción entrante** y deja que la aplicación la reintente más adelante esperando que no haya concurrecia.
 
-OCC:
++ **Tercera decisión:** Snapshot isolation:
+	+ Las transacciones leen una captura estática de los datos en el tiempo (snapshot). Esto permite que las lecturas de otros usuarios continúen a velocidad normal sin quedar bloqueadas por una transacción en curso
 
-En lugar de "detener el sistema" o bloquear filas esperando que terminen las consultas (como hace el bloqueo pesimista en SQL)
++ Hoy en día, la división rígida "SQL = ACID" vs "NoSQL = BASE" ha desaparecido, en realidad MongoDB le quito todo el sentido a esta comparación.
 
-Permite que las transacciones avancen. Si al momento de hacer el commit detecta que otro proceso modificó el mismo documento, simplemente aborta la transacción entrante y deja que la aplicación la reintente
++ NoSQL (e.g. MongoDB, DynamoDB, DocumentDB): Nacieron orientadas a alta disponibilidad y escalabilidad horizontal (BASE), **pero** añadieron soporte ACID opcional para casos de uso específicos
 
-Snapshot isolation:
++ NewSQL (e.g. CockroachDB): Diseñada desde cero para ofrecer SQL estándar y ACID estricto, pero sobre arquitecturas distribuidas y escalables horizontalmente
 
-Las transacciones leen una captura estática de los datos en el tiempo (snapshot). Esto permite que las lecturas de otros usuarios continúen a velocidad normal sin quedar bloqueadas por una transacción en curso
-
-Hoy en día, la división rígida "SQL = ACID" vs "NoSQL = BASE" ha desaparecido
-
-NoSQL (e.g. MongoDB, DynamoDB): Nacieron orientadas a alta disponibilidad y escalabilidad horizontal (BASE), pero añadieron soporte ACID opcional para casos de uso específicos
-
-NewSQL (e.g. CockroachDB): Diseñada desde cero para ofrecer SQL estándar y ACID estricto, pero sobre arquitecturas distribuidas y escalables horizontalmente
-
-OBVIAMENTE, se paga el precio: hay un impacto en la latencia gracias al seguimiento de la versión de los documentos (a.k.a snapshot memory) y la coordinación entre nodos en réplicas
++ Como ya sabemos que no hay un free lunch, OBVIAMENTE, se paga el precio: hay un impacto en la latencia gracias al seguimiento de la versión de los documentos (a.k.a snapshot memory) y la coordinación entre nodos en réplicas
 
 En SQL se exige un esquema predefinido (CREATE TABLE) antes de insertar cualquier dato
 
