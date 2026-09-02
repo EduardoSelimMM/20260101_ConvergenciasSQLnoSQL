@@ -26,8 +26,12 @@
 
 + La primera y casi obvia: Es poder hacer operaciones CRUD [**C**reate, **R**ead, **U**pdate, **D**elete] como SQL
 
-+ El `Aggregation Pipeline` de MongoDB fue diseñado para replicar la expresividad de las transformaciones de SQL
-  + Con la ventaja de que además se hace mediante una sucesión de etapas
++ Esto se hace intuitivo a partir de los que se conoce como el `Aggregation Pipeline`
+
++ El `Aggregation Pipeline` de MongoDB fue diseñado para ==replicar la expresividad de las transformaciones de SQL==
+  + Con la ventaja (importante) de que además se hace mediante una sucesión de etapas
+  + Nos permite pensar como pipeline i.e. una transformación después de otra
+  + Hace que la lógica sea más natural y la sintaxis mucho más sencilla de leer
 
 | Etapa MongoDB | Cláusula SQL equivalente | Propósito |
 |---|---|---|
