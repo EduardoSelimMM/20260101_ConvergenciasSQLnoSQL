@@ -1,8 +1,30 @@
 # Sesión 3: 1 de septiembre de 2026 😃
 
-+ SQL (relacional, centrado en tablas y esquemas rígidos) y MongoDB (NoSQL, centrado en documentos JSON y esquemas flexibles) partieron de filosofías diferentes
++ ¿Qué revisamos la sesión del sábado?
 
-+ Han ido evolucionando para incorporar características del otro
++ Terminamos de ver las característicos generales de Amazon Aurora
+
++ Revisamos el Teorema CAP
+
++ Los principios de NoSQL
+
++ En general, había 4 enfoques diferentes en NoSQL:
+	+ Clave-valor (un diccionario gigante)
+	+ Documentales (basados en la idea de documento)
+	+ Los de columna-ancha (wide-column o family column)
+	+ Basados en grafos (vértices y nodos)
+
+# Algunas convergencias entre SQL y MongoDB
+
++ SQL (relacional, centrado en tablas y esquemas rígidos/obligatorios)... Hay que definir las relaciones entre las tablas. PRO: Sabemos con detalle como se relacionan los datos. CONTRA: Requiere de mucho diseño y no permite hacer escrituras que no satisfagan estas relaciones.
+
++ MongoDB (NoSQL, centrado en documentos JSON y esquemas flexibles)
+
++ Ambas provienen de  filosofías diferentes
+
++ Afortunadamente, han ido evolucionando para incorporar características del otro
+
++ La primera y casi obvia: Es poder hacer operaciones CRUD [**C**reate, **R**ead, **U**pdate, **D**elete] como SQL
 
 + El `Aggregation Pipeline` de MongoDB fue diseñado para replicar la expresividad de las transformaciones de SQL
   + Con la ventaja de que además se hace mediante una sucesión de etapas
