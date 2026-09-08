@@ -50,7 +50,7 @@ psql --version
 psql -h TU_ENDPOINT_AQUI -U dbadmin -d mi_base_postgres
 
 
-Si te pide la contraseña y te deja entrar (prompt mi_base_postgres=>), la conectividad ya funciona
+Si te pide la contraseña y te deja entrar (prompt `mi_base_postgres=>`), la conectividad ya funciona
 
 5. Salir del entorno de la base `\q` en la terminal
 
@@ -62,7 +62,7 @@ Paso 4: Poblar la base de datos
 sudo dnf install -y python3-pip
 ```
 
-2. Instalar librería de Python necesaria
+2. Instalar librerías de Python necesarias
 
 ```
 pip3 install faker psycopg2-binary --user
