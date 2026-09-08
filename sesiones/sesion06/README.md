@@ -594,6 +594,39 @@ OJO: WHERE tc.constraint_type = 'FOREIGN KEY' dice "tráeme todas las llaves for
 
 # Levantar base de datos DynamoDB
 
+## Paso 1: Crear la tabla 'Clientes`
+
+1. Busca DynamoDB en la barra de búsqueda
+2. Menú izquierdo → Tables → Create table.
+
+Table name: Clientes
+Partition key: clienteId, tipo String
+Deja "Sort key" sin marcar, y en Table settings deja "Default settings".
+Create table → espera a que diga Active.
+
+## Paso 2: Agregar un par de ítems a mano
+Con la tabla Clientes ya creada, haz clic sobre su nombre para entrar a sus detalles.
+Pestaña Explore table items.
+Botón Create item.
+Puedes usar la vista Form (llenar campos con botones "Add new attribute") o cambiar a vista JSON (más rápido). En JSON, pega esto:
+
+```
+{
+  "clienteId": {"S": "C002"},
+  "nombre": {"S": "Carlos Ruiz"},
+  "ciudad": {"S": "Monterrey"}
+}
+```
+
+```
+{
+  "clienteId": {"S": "C001"},
+  "nombre": {"S": "Ana Lopez"},
+  "ciudad": {"S": "Puebla"}
+}
+```
+
+
 ```
 import random
 import time
