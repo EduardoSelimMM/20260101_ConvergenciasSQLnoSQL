@@ -364,4 +364,232 @@ Paso 5: Practicar nuestras queries
 ```
 \i mi_query.sql
 ```
+### Ejemplo 0:
+
+```
+SELECT id, nombre, preferencias FROM clientes LIMIT 5;
+```
+
+```
+SELECT id, nombre, atributos FROM productos LIMIT 5;
+```
+
+```
+SELECT id, estado, metadata FROM pedidos LIMIT 5;
+```
+
+### Ejemplo 1:
+
+Ver qué colores existen realmente en tus datos
+
+```
+SELECT DISTINCT atributos->>'color' AS color
+FROM productos
+ORDER BY color;
+```
+
+### Ejemplo 2:
+
+Extraer y castear un número que vive dentro del JSON como texto
+
+```
+SELECT nombre, (atributos->>'garantia_meses')::int AS garantia
+FROM productos
+ORDER BY garantia DESC;
+```
+
+OJO: `->>'garantia_meses'` devuelve texto, hay que convertirlo para comparar/ordenar numéricamente
+
+### Ejemplo 3:
+
+Filtrar por contención exacta de un campo con `@>`
+
+```
+SELECT nombre, atributos
+FROM productos
+WHERE atributos @> '{"garantia_meses": 24}';
+```
+
+### Ejemplo 4:
+
+Productos con más de un tag usando `jsonb_array_length`
+
+```
+SELECT nombre, atributos->'tags' AS tags
+FROM productos
+WHERE jsonb_array_length(atributos->'tags') > 1;
+```
+
+### Ejemplo 5:
+
+Clientes que sí quieren newsletter
+
+```
+SELECT nombre, preferencias->>'newsletter' AS newsletter
+FROM clientes
+WHERE preferencias @> '{"newsletter": true}';
+```
+
+### Ejemplo 6:
+
+Clientes cuya categoría favorita incluye "Electrónica" (operador ? sobre un arreglo)
+
+```
+SELECT nombre, preferencias->'categorias_favoritas' AS favoritas
+FROM clientes
+WHERE preferencias->'categorias_favoritas' ? 'Electrónica';
+```
+
+### Ejemplo 7:
+
+Extraer un campo de 2 niveles de profundidad con `#>>`
+
+
+```
+SELECT nombre, preferencias #>> '{direccion,ciudad}' AS ciudad_envio
+FROM clientes;
+```
+
+### Ejemplo 8:
+
+Este es un error común: null de JSON vs NULL de SQL
+
+Si quisiéramos contar TODOS los pedidos
+
+```
+SELECT COUNT(*) FROM pedidos WHERE metadata->'cupon' IS NOT NULL;
+```
+
+Esto NO filtra los pedidos sin cupón, porque el "null" quedó guardado como valor JSON (jsonb 'null'), no como ausencia de valor SQL
+
+
+La forma correcta es navegar un nivel más adentro. Si el padre es JSON null, el siguiente `->>` sí devuelve NULL de SQL de verdad
+
+
+```
+SELECT COUNT(*) FROM pedidos WHERE metadata->'cupon'->>'codigo' IS NOT NULL;  -- cuenta solo los que sí tienen cupón
+```
+
+Otra forma usando jsonb_typeof
+
+```
+SELECT COUNT(*) FROM pedidos WHERE jsonb_typeof(metadata->'cupon') <> 'null';
+```
+
+### Ejemplo 9:
+
+Pedidos con cupón real
+
+```
+SELECT p.id, c.nombre, p.total,
+       p.metadata->'cupon'->>'codigo' AS codigo_cupon,
+       (p.metadata->'cupon'->>'descuento_pct')::int AS descuento_pct
+FROM pedidos p
+JOIN clientes c ON p.cliente_id = c.id
+WHERE p.metadata->'cupon'->>'codigo' IS NOT NULL;
+```
+
+### Ejemplo 10:
+
+Descuento promedio otorgado (sólo entre pedidos que sí tuvieron cupón)
+
+```
+SELECT ROUND(AVG((metadata->'cupon'->>'descuento_pct')::numeric), 2) AS descuento_promedio
+FROM pedidos
+WHERE metadata->'cupon'->>'codigo' IS NOT NULL;
+```
+
+### Ejemplo 11:
+
+Número de pedidos que hay por canal (web/app), extrayendo directo del JSONB
+
+```
+SELECT metadata->>'canal' AS canal, COUNT(*) AS total_pedidos
+FROM pedidos
+GROUP BY metadata->>'canal'
+ORDER BY total_pedidos DESC;
+```
+
+### Ejemplo 12:
+
+Frecuencia de tags entre todos los productos
+
+```
+SELECT tag, COUNT(*) AS cantidad
+FROM productos, jsonb_array_elements_text(atributos->'tags') AS tag
+GROUP BY tag
+ORDER BY cantidad DESC;
+```
+
+OJO: Vean que acá expandimos arreglo y agrupamos
+
+### Ejemplo 13:
+
+Ranking de ciudades de envío con más clientes, extraído del JSONB anidado
+
+```
+SELECT preferencias #>> '{direccion,ciudad}' AS ciudad, COUNT(*) AS num_clientes
+FROM clientes
+GROUP BY ciudad
+ORDER BY num_clientes DESC;
+```
+
+### Ejemplo 14:
+
+Gasto total de clientes que aceptan newsletter
+
+```
+SELECT c.nombre, SUM(p.total) AS gasto_total
+FROM clientes c
+JOIN pedidos p ON p.cliente_id = c.id
+WHERE c.preferencias @> '{"newsletter": true}'
+GROUP BY c.nombre
+ORDER BY gasto_total DESC;
+```
+
+OJO: Acá combinamos JSONB, JOIN y GROUP BY
+
+### Ejemplo 15:
+
+Modificar un valor dentro del JSON sin tocar el resto de la estructura
+
+```
+UPDATE productos
+SET atributos = jsonb_set(atributos, '{garantia_meses}', '36')
+WHERE (atributos->>'garantia_meses')::int < 12;
+```
+
+Verificamos cuántos se actualizaron:
+
+```
+SELECT COUNT(*) FROM productos WHERE atributos @> '{"garantia_meses": 36}';
+```
+
+### Ejemplo 16:
+
+En postgreSQL se puede crear un índice para acelerar filtros JSONB en tablas grandes
+
+``` 
+CREATE INDEX IF NOT EXISTS idx_pedidos_metadata ON pedidos USING GIN (metadata);
+```
+
+### Ejemplo 17:
+
+```
+SELECT
+    tc.table_name AS tabla_origen,
+    kcu.column_name AS columna_fk,
+    ccu.table_name AS tabla_referenciada,
+    ccu.column_name AS columna_referenciada
+FROM information_schema.table_constraints tc
+JOIN information_schema.key_column_usage kcu
+    ON tc.constraint_name = kcu.constraint_name
+JOIN information_schema.constraint_column_usage ccu
+    ON tc.constraint_name = ccu.constraint_name
+WHERE tc.constraint_type = 'FOREIGN KEY';
+```
+
+OJO: WHERE tc.constraint_type = 'FOREIGN KEY' dice "tráeme todas las llaves foráneas que existan en la base, sean cuales sean sus tablas"
+
+
 # Levantar base de datos DynamoDB
