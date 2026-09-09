@@ -76,9 +76,9 @@ Repite el proceso con el siguiente item
 
 + A nivel de la API interna de AWS, DynamoDB requiere que especifiques explícitamente el tipo de dato para cada atributo mediante descriptores
 
-+ `S` para string, `N` para número, `BOOL` para booleano, `M` para map, `L` para list, etc.
++ `S` para string, `N` para número, `BOOL` para booleano, `M` para map, `L` para list, `SS`/ `NS` para string set / number set (que básicamente so conjuntos de valores únicos), etc.
 
-+  De entrada aparecen tipos de datos "no tradicionales": map y list
++  De entrada aparecen tipos de datos "no tradicionales": map, list, string set, number set ...
 
 ```
 {
@@ -87,6 +87,7 @@ Repite el proceso con el siguiente item
   "Age": { "N": "29" },
   "IsActive": { "BOOL": true },
   "Roles": { "L": [ { "S": "admin" }, { "S": "developer" } ] },
+  "Category": {"SS": ["A", "B", "C"]},
   "Address": {
     "M": { "City": { "S": "CDMX" }, "ZipCode": { "N": "01000" } }
   }
