@@ -349,7 +349,7 @@ python3 generar-datos-para-dynamodb.py
 
 + Abre CloudShell
 
-## 1. Operaciones sobre TABLAS (estructura, no datos)
+## 1. Operaciones sobre tablas (estructura, no datos)
 
 ### `create-table`: Crea una tabla nueva
 ```
@@ -360,23 +360,26 @@ aws dynamodb create-table \
   --billing-mode PAY_PER_REQUEST
 ```
 
-### `list-tables`: Enlista todas las tablas
-```bash
+### `list-tables`: Muestra todas las tablas
+```
 aws dynamodb list-tables
 ```
 
-### describe-table — ver la estructura de una tabla (llaves, índices, estado)
-```bash
+### `describe-table`: Para ver la estructura de una tabla (claves, índices, estado)
+```
 aws dynamodb describe-table --table-name Clientes
 ```
 
-### delete-table — borrar una tabla completa (¡irreversible!)
-```bash
+### `delete-table`: Borra una tabla completa (OJO: es irreversible)
+```
 aws dynamodb delete-table --table-name Prueba
 ```
 
-### update-table — modificar configuración (ej. agregar un índice)
-```bash
+### `update-table`: Modifica la configuración de una tabla
+
++ Por ejemplo, para agregar un índice
+
+```
 aws dynamodb update-table \
   --table-name Productos \
   --attribute-definitions AttributeName=categoria,AttributeType=S \
@@ -386,17 +389,17 @@ aws dynamodb update-table \
 
 ---
 
-## 2. Operaciones de ESCRITURA (un ítem a la vez)
+## 2. Operaciones de escritura un item a la vez
 
-### put-item — insertar o reemplazar un ítem completo
-```bash
+### `put-item`: Inserta o reemplaza un item completo
+```
 aws dynamodb put-item \
   --table-name Clientes \
   --item '{"clienteId": {"S": "C999"}, "nombre": {"S": "Prueba"}}'
 ```
 
-### update-item — modificar solo algunos campos de un ítem existente
-```bash
+### `update-item`: Modifica sólo algunos campos de un item existente
+```
 aws dynamodb update-item \
   --table-name Productos \
   --key '{"productoId": {"S": "P001"}}' \
@@ -404,8 +407,8 @@ aws dynamodb update-item \
   --expression-attribute-values '{":s": {"N": "10"}}'
 ```
 
-### delete-item — borrar un ítem específico
-```bash
+### `delete-item`: Borra un ítem específico
+```
 aws dynamodb delete-item \
   --table-name Clientes \
   --key '{"clienteId": {"S": "C999"}}'
@@ -413,17 +416,20 @@ aws dynamodb delete-item \
 
 ---
 
-## 3. Operaciones de LECTURA (un ítem o varios)
+## 3. Operaciones de lectura de uno o varios items
 
-### get-item — traer UN ítem por su llave exacta (la más rápida posible)
-```bash
+### `get-item`: Trae un item por su clave exacta (la más rápida posible)
+```
 aws dynamodb get-item \
   --table-name Clientes \
   --key '{"clienteId": {"S": "C001"}}'
 ```
 
-### query — traer varios ítems que comparten partition key (eficiente, usa índice)
-```bash
+### `query`: Trae varios items que comparten partition key (eficiente, usa índice)
+
++ **IMPORTANTE:** El término "query" acá significa algo más específico, no un término genérico que usamos para referirnos a una consulta
+
+```
 aws dynamodb query \
   --table-name Pedidos \
   --index-name ClienteIndex \
@@ -431,11 +437,13 @@ aws dynamodb query \
   --expression-attribute-values '{":c": {"S": "C005"}}'
 ```
 
-### scan — revisar TODA la tabla, con o sin filtro (menos eficiente)
-```bash
+### `scan`: Revisa toda la tabla, con o sin filtro (aunque es menos eficiente)
+```
 aws dynamodb scan --table-name Productos
+```
 
-# con filtro:
++ Con un filtro:
+```
 aws dynamodb scan \
   --table-name Productos \
   --filter-expression "categoria = :cat" \
@@ -444,10 +452,10 @@ aws dynamodb scan \
 
 ---
 
-## 4. Operaciones en LOTE (batch) — varios ítems en una sola llamada
+## 4. Operaciones en batch a.k.a varios items en una sola llamada
 
-### batch-get-item — traer varios ítems específicos de una vez (más eficiente que varios GetItem)
-```bash
+### `batch-get-item`: Traer varios items específicos de una vez (es más eficiente que varios GetItem)
+```
 aws dynamodb batch-get-item \
   --request-items '{
     "Clientes": {
@@ -459,8 +467,8 @@ aws dynamodb batch-get-item \
   }'
 ```
 
-### batch-write-item — insertar o borrar varios ítems de una vez
-```bash
+### `batch-write-item`: Inserta o borra varios items de una vez
+```
 aws dynamodb batch-write-item \
   --request-items '{
     "Clientes": [
@@ -469,24 +477,25 @@ aws dynamodb batch-write-item \
     ]
   }'
 ```
-Nota: batch-write-item soporta máximo 25 operaciones por llamada.
+
++ **Nota**: `batch-write-item` soporta máximo 25 operaciones por llamada
 
 ---
 
-## 5. TRANSACCIONES — varias operaciones que se ejecutan todas o ninguna
+## 5. Trasnacciones: varias operaciones que se ejecutan todas o ninguna
 
-### transact-write-items — como una transacción de SQL (BEGIN/COMMIT), pero para varias escrituras
-```bash
+### `transact-write-items`: Como una transacción de SQL (BEGIN/COMMIT), pero para varias escrituras
+```
 aws dynamodb transact-write-items \
   --transact-items '[
     {"Put": {"TableName": "Clientes", "Item": {"clienteId": {"S": "C950"}, "nombre": {"S": "Transacción"}}}},
     {"Update": {"TableName": "Productos", "Key": {"productoId": {"S": "P001"}}, "UpdateExpression": "SET stock = stock - :n", "ExpressionAttributeValues": {":n": {"N": "1"}}}}
   ]'
 ```
-Útil, por ejemplo, para "crear un pedido Y descontar el stock" de forma que, si algo falla, ninguna de las 2 cosas se aplique.
++ Es útil para "crear un pedido y descontar el stock" de forma que, si algo falla, ninguna de las 2 cosas se aplique
 
-### transact-get-items — leer varios ítems de forma consistente en un solo instante
-```bash
+### `transact-get-items`: Lee varios items de forma consistente en un solo instante
+```
 aws dynamodb transact-get-items \
   --transact-items '[
     {"Get": {"TableName": "Clientes", "Key": {"clienteId": {"S": "C001"}}}},
