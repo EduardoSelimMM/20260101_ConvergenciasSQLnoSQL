@@ -626,6 +626,13 @@ Puedes usar la vista Form (llenar campos con botones "Add new attribute") o camb
 }
 ```
 
+```
+pip install faker
+```
+
+```
+nano generar-datos-para-dynamodb.py
+```
 
 ```
 import random
@@ -804,4 +811,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
+
+```
+python3 generar-datos-para_dynamodb.py
 ```
