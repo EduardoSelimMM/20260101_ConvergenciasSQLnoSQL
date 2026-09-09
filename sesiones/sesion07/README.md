@@ -4,7 +4,7 @@
 
 + Entre las instrucciones se irán dando algunas otras características
 
-+ **Amazon DynamoDB** es un servicio de base de datos **NoSQL** de tipo clave-valor totalmente administrado por AWS
++ **Amazon DynamoDB** es un servicio de base de datos **NoSQL** con modelo **clave-valor** totalmente administrado por AWS
 
 + Promete tener latencias de un solo dígito de milisegundo a cualquier escala
 
