@@ -503,44 +503,24 @@ aws dynamodb transact-get-items \
   ]'
 ```
 
+## Traer un cliente exacto
 ```
-# Queries SIN PartiQL sobre las tablas de Faker
-# Dos formas: AWS CLI (la más "cruda") y boto3 (la que usa tu script)
-
-## ============================================================
-## 1. GetItem — traer un cliente exacto
-## ============================================================
-
-# --- AWS CLI ---
 aws dynamodb get-item \
   --table-name Clientes \
   --key '{"clienteId": {"S": "C001"}}'
+```
 
-# --- boto3 (en el intérprete de Python) ---
-# tabla = dynamodb.Table("Clientes")
-# tabla.get_item(Key={"clienteId": "C001"})
+## Pedidos de un cliente, usando el índice ClienteIndex
 
-
-## ============================================================
-## 2. Query — pedidos de un cliente, usando el índice ClienteIndex
-## ============================================================
-
-# --- AWS CLI ---
+```
 aws dynamodb query \
   --table-name Pedidos \
   --index-name ClienteIndex \
   --key-condition-expression "clienteId = :c" \
   --expression-attribute-values '{":c": {"S": "C005"}}'
+```
 
-# --- boto3 ---
-# from boto3.dynamodb.conditions import Key
-# tabla_pedidos = dynamodb.Table("Pedidos")
-# tabla_pedidos.query(
-#     IndexName="ClienteIndex",
-#     KeyConditionExpression=Key("clienteId").eq("C005")
-# )
-
-
+```
 ## ============================================================
 ## 3. Scan con filtro — productos de una categoría
 ## ============================================================
