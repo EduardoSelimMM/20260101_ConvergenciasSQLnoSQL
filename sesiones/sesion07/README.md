@@ -347,6 +347,14 @@ python3 generar-datos-para-dynamodb.py
 
 # "Convergencias" entre DynamoDB y SQL
 
++ PartiQL es un lenguaje de consulta compatible con SQL que facilita la consulta eficiente de datos en DynamoDB mediante las sentencias DML (Data Manipulation Language) SELECT, INSERT, UPDATE y DELETE, i.e. manipular datos dentro de una estructura ya existente
+
++ ¿Por qué? ¿Para qué?
+
++ Para poder utilizar un lenguaje conocido para comenzar a trabajar con DynamoDB. No necesitas conocer **completamente** el lenguaje de consultas propio de DynamoDB... Por supuesto, esto tiene sus "asegunes"
+
++ Se puede utilizar PartiQL si no quieres trabajar directamente con FilterExpressions
+
 + PartiQL fue agregado en 2020, como una "capa de conveniencia" dado el capitalismo voraz... intentar darle poderes SQL a una base NoSQL
 
 + La forma "nativa" y original de DynamoDB desde el principio nunca fue un lenguaje de consultas tipo SQL, sino un conjunto de operaciones de API, cada una con su propio formato JSON
@@ -366,3 +374,25 @@ python3 generar-datos-para-dynamodb.py
 + No estamos en arenas movedizas acá, pues no hay una tensión filosófica profunda
 
 + PartiQL no está intentando que DynamoDB haga cosas para las que no fue diseñado. Es sólo vocabulario distinto para las mismas operaciones limitadas de siempre
+
++ No hay JOIN... cada consulta de PartiQL trabaja sobre una sola tabla, nunca combina varias.
+
++ No hay agregaciones SUM, AVG, COUNT de grupo, etc
+
++ No hay CREATE TABLE, ALTER TABLE
+
++ No hay GROUP BY ni HAVING
+
++ Las cláusulas LIMIT, GROUP BY y HAVING no son compatibles con las sentencias SELECT de PartiQL
+
++ No hay `subqueries` i.e. no puedes anidar un SELECT dentro de otro... algo súper súper súper común en SQL relacional
+
++ ORDER BY sólo funciona en casos muy específicos. Generalmente necesitas tener ya un WHERE sobre la llave de partición
+
+	+ Si intentas ordenar sin eso, se obtiene un error de validación que dice que debe existir una cláusula WHERE en la sentencia cuando se usa ORDER BY
+
+	+ Básicamente porque al ser un Scan, no hay forma posible de tener ORDER BY sin ese WHERE, ya que DynamoDB no ordena las filas al leerlas de varias particiones y PartiQL no hace ningún procesamiento adicional sobre el resultado
+
++ PartiQL no es lo suficientemente "inteligente" como para elegir un índice secundario cuando el WHERE filtra sobre la llave de ese índice
+
+	+ Se tiene que especificar directamente el índice secundario en la cláusula FROM para poder lograrlo
