@@ -100,14 +100,18 @@ Repite el proceso con el siguiente item
 
 + Salvo por los atributos que forman la clave primaria (partition key y opcionalmente sort key), dos items en la misma tabla pueden tener atributos completamente diferentes
 
+## Paso 3: Poblar la base de datos
+
+Como antes, poblaremos la base con un script de Python que usa la librería {faker} para generar datos artificiales con una estructura deseada
+
+1. Click en el ícono de terminal (`>_`) en la parte superior
+2. Instalar la librería de Python, faker
 
 ```
 pip install faker
 ```
 
-```
-nano generar-datos-para-dynamodb.py
-```
+3. Copia el contenido del siguiente chunk
 
 ```
 import random
@@ -288,6 +292,19 @@ if __name__ == "__main__":
     main()
 ```
 
+4. Regresa a la terminal y pega crear el archivo .py a ejecutar
+
+```
+nano generar-datos-para-dynamodb.py
+```
+y pega el contenido (Ctrl + O, Enter, Ctrl + X)
+
+5. En la línea de comando ejecuta el script python
+
 ```
 python3 generar-datos-para_dynamodb.py
 ```
+
+6. Verificar en AWS, DynamoDB → Tables → Clientes → Explore table items... y deberías ver 30 registros
+
++ En comparación con la sesión pasada que hicimos postgreSQL, ¿notan algo diferente?
