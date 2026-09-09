@@ -353,7 +353,7 @@ python3 generar-datos-para-dynamodb.py
 
 + Para poder utilizar un lenguaje conocido para comenzar a trabajar con DynamoDB. No necesitas conocer **completamente** el lenguaje de consultas propio de DynamoDB... Por supuesto, esto tiene sus "asegunes"
 
-+ Se puede utilizar PartiQL si no quieres trabajar directamente con FilterExpressions
++ Puedes utilizar PartiQL si no quieres trabajar directamente con FilterExpressions
 
 + PartiQL fue agregado en 2020, como una "capa de conveniencia" dado el capitalismo voraz... intentar darle poderes SQL a una base NoSQL
 
