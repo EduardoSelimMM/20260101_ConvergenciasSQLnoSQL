@@ -345,6 +345,153 @@ python3 generar-datos-para-dynamodb.py
 
 + En DynamoDB, el diseño de tablas empieza preguntando "¿cómo voy a buscar esto?" antes de crear la tabla. A esto se le llama "diseño orientado a patrones de acceso"
 
+# Hagamos algunas consultas
+
+## 1. Operaciones sobre TABLAS (estructura, no datos)
+
+### create-table — crear una tabla nueva
+```bash
+aws dynamodb create-table \
+  --table-name Prueba \
+  --attribute-definitions AttributeName=id,AttributeType=S \
+  --key-schema AttributeName=id,KeyType=HASH \
+  --billing-mode PAY_PER_REQUEST
+```
+
+### list-tables — listar todas tus tablas
+```bash
+aws dynamodb list-tables
+```
+
+### describe-table — ver la estructura de una tabla (llaves, índices, estado)
+```bash
+aws dynamodb describe-table --table-name Clientes
+```
+
+### delete-table — borrar una tabla completa (¡irreversible!)
+```bash
+aws dynamodb delete-table --table-name Prueba
+```
+
+### update-table — modificar configuración (ej. agregar un índice)
+```bash
+aws dynamodb update-table \
+  --table-name Productos \
+  --attribute-definitions AttributeName=categoria,AttributeType=S \
+  --global-secondary-index-updates \
+  '[{"Create":{"IndexName":"CategoriaIndex","KeySchema":[{"AttributeName":"categoria","KeyType":"HASH"}],"Projection":{"ProjectionType":"ALL"}}}]'
+```
+
+---
+
+## 2. Operaciones de ESCRITURA (un ítem a la vez)
+
+### put-item — insertar o reemplazar un ítem completo
+```bash
+aws dynamodb put-item \
+  --table-name Clientes \
+  --item '{"clienteId": {"S": "C999"}, "nombre": {"S": "Prueba"}}'
+```
+
+### update-item — modificar solo algunos campos de un ítem existente
+```bash
+aws dynamodb update-item \
+  --table-name Productos \
+  --key '{"productoId": {"S": "P001"}}' \
+  --update-expression "SET stock = :s" \
+  --expression-attribute-values '{":s": {"N": "10"}}'
+```
+
+### delete-item — borrar un ítem específico
+```bash
+aws dynamodb delete-item \
+  --table-name Clientes \
+  --key '{"clienteId": {"S": "C999"}}'
+```
+
+---
+
+## 3. Operaciones de LECTURA (un ítem o varios)
+
+### get-item — traer UN ítem por su llave exacta (la más rápida posible)
+```bash
+aws dynamodb get-item \
+  --table-name Clientes \
+  --key '{"clienteId": {"S": "C001"}}'
+```
+
+### query — traer varios ítems que comparten partition key (eficiente, usa índice)
+```bash
+aws dynamodb query \
+  --table-name Pedidos \
+  --index-name ClienteIndex \
+  --key-condition-expression "clienteId = :c" \
+  --expression-attribute-values '{":c": {"S": "C005"}}'
+```
+
+### scan — revisar TODA la tabla, con o sin filtro (menos eficiente)
+```bash
+aws dynamodb scan --table-name Productos
+
+# con filtro:
+aws dynamodb scan \
+  --table-name Productos \
+  --filter-expression "categoria = :cat" \
+  --expression-attribute-values '{":cat": {"S": "Electrónica"}}'
+```
+
+---
+
+## 4. Operaciones en LOTE (batch) — varios ítems en una sola llamada
+
+### batch-get-item — traer varios ítems específicos de una vez (más eficiente que varios GetItem)
+```bash
+aws dynamodb batch-get-item \
+  --request-items '{
+    "Clientes": {
+      "Keys": [
+        {"clienteId": {"S": "C001"}},
+        {"clienteId": {"S": "C002"}}
+      ]
+    }
+  }'
+```
+
+### batch-write-item — insertar o borrar varios ítems de una vez
+```bash
+aws dynamodb batch-write-item \
+  --request-items '{
+    "Clientes": [
+      {"PutRequest": {"Item": {"clienteId": {"S": "C900"}, "nombre": {"S": "Lote 1"}}}},
+      {"PutRequest": {"Item": {"clienteId": {"S": "C901"}, "nombre": {"S": "Lote 2"}}}}
+    ]
+  }'
+```
+Nota: batch-write-item soporta máximo 25 operaciones por llamada.
+
+---
+
+## 5. TRANSACCIONES — varias operaciones que se ejecutan todas o ninguna
+
+### transact-write-items — como una transacción de SQL (BEGIN/COMMIT), pero para varias escrituras
+```bash
+aws dynamodb transact-write-items \
+  --transact-items '[
+    {"Put": {"TableName": "Clientes", "Item": {"clienteId": {"S": "C950"}, "nombre": {"S": "Transacción"}}}},
+    {"Update": {"TableName": "Productos", "Key": {"productoId": {"S": "P001"}}, "UpdateExpression": "SET stock = stock - :n", "ExpressionAttributeValues": {":n": {"N": "1"}}}}
+  ]'
+```
+Útil, por ejemplo, para "crear un pedido Y descontar el stock" de forma que, si algo falla, ninguna de las 2 cosas se aplique.
+
+### transact-get-items — leer varios ítems de forma consistente en un solo instante
+```bash
+aws dynamodb transact-get-items \
+  --transact-items '[
+    {"Get": {"TableName": "Clientes", "Key": {"clienteId": {"S": "C001"}}}},
+    {"Get": {"TableName": "Productos", "Key": {"productoId": {"S": "P001"}}}}
+  ]'
+```
+
 # "Convergencias" entre DynamoDB y SQL
 
 + PartiQL es un lenguaje de consulta compatible con SQL que facilita la consulta eficiente de datos en DynamoDB mediante las sentencias DML (Data Manipulation Language) SELECT, INSERT, UPDATE y DELETE, i.e. manipular datos dentro de una estructura ya existente
