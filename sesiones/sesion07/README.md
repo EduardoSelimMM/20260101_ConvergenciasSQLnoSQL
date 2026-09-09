@@ -503,6 +503,194 @@ aws dynamodb transact-get-items \
   ]'
 ```
 
+```
+# Queries SIN PartiQL sobre las tablas de Faker
+# Dos formas: AWS CLI (la más "cruda") y boto3 (la que usa tu script)
+
+## ============================================================
+## 1. GetItem — traer un cliente exacto
+## ============================================================
+
+# --- AWS CLI ---
+aws dynamodb get-item \
+  --table-name Clientes \
+  --key '{"clienteId": {"S": "C001"}}'
+
+# --- boto3 (en el intérprete de Python) ---
+# tabla = dynamodb.Table("Clientes")
+# tabla.get_item(Key={"clienteId": "C001"})
+
+
+## ============================================================
+## 2. Query — pedidos de un cliente, usando el índice ClienteIndex
+## ============================================================
+
+# --- AWS CLI ---
+aws dynamodb query \
+  --table-name Pedidos \
+  --index-name ClienteIndex \
+  --key-condition-expression "clienteId = :c" \
+  --expression-attribute-values '{":c": {"S": "C005"}}'
+
+# --- boto3 ---
+# from boto3.dynamodb.conditions import Key
+# tabla_pedidos = dynamodb.Table("Pedidos")
+# tabla_pedidos.query(
+#     IndexName="ClienteIndex",
+#     KeyConditionExpression=Key("clienteId").eq("C005")
+# )
+
+
+## ============================================================
+## 3. Scan con filtro — productos de una categoría
+## ============================================================
+
+# --- AWS CLI ---
+aws dynamodb scan \
+  --table-name Productos \
+  --filter-expression "categoria = :cat" \
+  --expression-attribute-values '{":cat": {"S": "Electrónica"}}'
+
+# --- boto3 ---
+# from boto3.dynamodb.conditions import Attr
+# tabla_productos = dynamodb.Table("Productos")
+# tabla_productos.scan(FilterExpression=Attr("categoria").eq("Electrónica"))
+
+
+## ============================================================
+## 4. Scan — pedidos por estado
+## ============================================================
+
+# --- AWS CLI ---
+aws dynamodb scan \
+  --table-name Pedidos \
+  --filter-expression "estado = :e" \
+  --expression-attribute-values '{":e": {"S": "pendiente"}}'
+
+# --- boto3 ---
+# tabla_pedidos.scan(FilterExpression=Attr("estado").eq("pendiente"))
+
+
+## ============================================================
+## 5. Filtro sobre un atributo anidado (mapa dentro de mapa)
+## ============================================================
+
+# --- AWS CLI ---
+aws dynamodb scan \
+  --table-name Clientes \
+  --filter-expression "preferencias.direccion.ciudad = :c" \
+  --expression-attribute-values '{":c": {"S": "Guadalajara"}}'
+
+# --- boto3 ---
+# tabla_clientes.scan(
+#     FilterExpression=Attr("preferencias.direccion.ciudad").eq("Guadalajara")
+# )
+
+
+## ============================================================
+## 6. contains() — productos que tienen el tag "oferta"
+## ============================================================
+
+# --- AWS CLI ---
+aws dynamodb scan \
+  --table-name Productos \
+  --filter-expression "contains(atributos.tags, :t)" \
+  --expression-attribute-values '{":t": {"S": "oferta"}}'
+
+# --- boto3 ---
+# tabla_productos.scan(FilterExpression=Attr("atributos.tags").contains("oferta"))
+
+
+## ============================================================
+## 7. attribute_exists() — pedidos que sí tienen cupón con código
+## ============================================================
+
+# --- AWS CLI ---
+aws dynamodb scan \
+  --table-name Pedidos \
+  --filter-expression "attribute_exists(metadata.cupon.codigo)"
+
+# --- boto3 ---
+# tabla_pedidos.scan(FilterExpression=Attr("metadata.cupon.codigo").exists())
+
+
+## ============================================================
+## 8. Ejemplo con ExpressionAttributeNames — cuando el campo choca
+## con una palabra reservada de DynamoDB (aquí NO nos pasa con
+## nuestros campos, pero es común con nombres como "status" o "size")
+## ============================================================
+
+# Si tuvieras un campo llamado, por ejemplo, "status" en vez de "estado":
+# aws dynamodb scan \
+#   --table-name Pedidos \
+#   --filter-expression "#s = :e" \
+#   --expression-attribute-names '{"#s": "status"}' \
+#   --expression-attribute-values '{":e": {"S": "pendiente"}}'
+# El "#s" es un alias que evita el choque con la palabra reservada.
+
+
+## ============================================================
+## 9. PutItem — insertar un cliente nuevo
+## ============================================================
+
+# --- AWS CLI ---
+aws dynamodb put-item \
+  --table-name Clientes \
+  --item '{
+    "clienteId": {"S": "C999"},
+    "nombre": {"S": "Cliente de Prueba"},
+    "ciudad": {"S": "CDMX"},
+    "preferencias": {"M": {
+      "newsletter": {"BOOL": true},
+      "categoriasFavoritas": {"L": [{"S": "Electrónica"}]}
+    }}
+  }'
+
+# --- boto3 (¡nota que aquí NO se escriben los tipos! como ya vimos) ---
+# tabla_clientes.put_item(Item={
+#     "clienteId": "C999",
+#     "nombre": "Cliente de Prueba",
+#     "ciudad": "CDMX",
+#     "preferencias": {
+#         "newsletter": True,
+#         "categoriasFavoritas": ["Electrónica"]
+#     }
+# })
+
+
+## ============================================================
+## 10. UpdateItem — cambiar el stock de un producto
+## ============================================================
+
+# --- AWS CLI ---
+aws dynamodb update-item \
+  --table-name Productos \
+  --key '{"productoId": {"S": "P001"}}' \
+  --update-expression "SET stock = :s" \
+  --expression-attribute-values '{":s": {"N": "0"}}'
+
+# --- boto3 ---
+# tabla_productos = dynamodb.Table("Productos")
+# tabla_productos.update_item(
+#     Key={"productoId": "P001"},
+#     UpdateExpression="SET stock = :s",
+#     ExpressionAttributeValues={":s": 0}
+# )
+
+
+## ============================================================
+## 11. DeleteItem — borrar el cliente de prueba
+## ============================================================
+
+# --- AWS CLI ---
+aws dynamodb delete-item \
+  --table-name Clientes \
+  --key '{"clienteId": {"S": "C999"}}'
+
+# --- boto3 ---
+# tabla_clientes.delete_item(Key={"clienteId": "C999"})
+```
+
 # "Convergencias" entre DynamoDB y SQL
 
 + PartiQL es un lenguaje de consulta compatible con SQL que facilita la consulta eficiente de datos en DynamoDB mediante las sentencias DML (Data Manipulation Language) SELECT, INSERT, UPDATE y DELETE, i.e. manipular datos dentro de una estructura ya existente
