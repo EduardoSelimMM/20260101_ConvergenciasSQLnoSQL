@@ -104,7 +104,7 @@ Repite el proceso con el siguiente item
 
 Como antes, poblaremos la base con un script de Python que usa la librería {faker} para generar datos artificiales con una estructura deseada
 
-1. Click en el ícono de terminal (`>_`) en la parte superior
+1. Click en el ícono de terminal (`>_`) en la parte superior (a.k.a. abrir el CloudShell de AWS)
 2. Instalar la librería de Python, faker
 
 ```
@@ -347,7 +347,7 @@ python3 generar-datos-para-dynamodb.py
 
 # Hagamos algunas consultas
 
-+ Abre CloudShell
++ Click en el ícono de terminal (`>_`) en la parte superior (a.k.a. abrir el CloudShell de AWS)
 
 ## 1. Operaciones sobre tablas (estructura, no datos)
 
