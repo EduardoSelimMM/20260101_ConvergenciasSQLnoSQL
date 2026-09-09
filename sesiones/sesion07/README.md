@@ -302,7 +302,7 @@ y pega el contenido (Ctrl + O, Enter, Ctrl + X)
 5. En la línea de comando ejecuta el script python
 
 ```
-python3 generar-datos-para_dynamodb.py
+python3 generar-datos-para-dynamodb.py
 ```
 
 6. Verificar en AWS, DynamoDB → Tables → Clientes → Explore table items... y deberías ver 30 registros
