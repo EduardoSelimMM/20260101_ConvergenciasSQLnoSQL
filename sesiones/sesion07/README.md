@@ -16,9 +16,9 @@
 
 + Esto quiere decir que no requiere aprovisionar ni administrar servidores. AWS coordina el escalado, los parches de seguridad, las copias de seguridad, la replicación, etc.
 
-+ Replica automáticamente los datos en al menos tres zonas de disponibilidad (AZs) dentro de una región AWS
++ Replica automáticamente los datos en al menos tres zonas de disponibilidad dentro de una región de AWS
 
-+ Aunque inicialmente estaba pensada para estructuras de datos de clave-valor, esta estructura es tan flexible que se dice que también recibe documentos JSON
++ Aunque inicialmente estaba pensada para estructuras de datos de clave-valor, dicha estructura es tan flexible que se dice que también recibe documentos JSON
 
 ## Modelo de datos básico
 
