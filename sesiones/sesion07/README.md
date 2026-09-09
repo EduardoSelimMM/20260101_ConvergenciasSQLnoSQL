@@ -34,15 +34,18 @@
 
 	+ Existe una **sort key** que, aunque es opcional, permite ordenar elementos dentro de la misma partición para realizar consultas por rangos
 
-## Paso 1: Crear la tabla 'Clientes`
++ Vamos a empezar a levantar la base...
+
+## Paso 1: Crear una tabla
 
 1. Busca DynamoDB en la barra de búsqueda
-2. Menú izquierdo → Tables → Create table.
+2. Menú izquierdo → Tables → Create table
 
-Table name: Clientes
-Partition key: clienteId, tipo String
-Deja "Sort key" sin marcar, y en Table settings deja "Default settings".
-Create table → espera a que diga Active.
++ Table name: `Clientes`
++ Partition key: `clienteId`
++ Tipo: `String`
++ Deja "sort key" sin marcar, y en "Table settings" deja "Default settings"
++ Create table → espera a que diga Active.
 
 ## Paso 2: Agregar un par de ítems a mano
 Con la tabla Clientes ya creada, haz clic sobre su nombre para entrar a sus detalles.
