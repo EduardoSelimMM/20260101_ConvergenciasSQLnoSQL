@@ -36,6 +36,8 @@
 
 + Vamos a empezar a levantar la base...
 
+## Paso 0: Entrar al Learner Lab
+
 ## Paso 1: Crear una tabla
 
 1. Busca DynamoDB en la barra de búsqueda
@@ -47,23 +49,26 @@
 + Deja "sort key" sin marcar, y en "Table settings" deja "Default settings"
 + Create table → espera a que diga Active.
 
-## Paso 2: Agregar un par de ítems a mano
-Con la tabla Clientes ya creada, haz clic sobre su nombre para entrar a sus detalles.
-Pestaña Explore table items.
-Botón Create item.
-Puedes usar la vista Form (llenar campos con botones "Add new attribute") o cambiar a vista JSON (más rápido). En JSON, pega esto:
+## Paso 2: Agregar un par de items "a mano"
 
-```
-{
-  "clienteId": {"S": "C002"},
-  "nombre": {"S": "Carlos Ruiz"},
-  "ciudad": {"S": "Monterrey"}
-}
-```
+1. Con la tabla `Clientes` ya creada, haz click sobre su nombre para entrar a sus detalles
+2. Pestaña: Explore table items.
+3. Botón Create item.
+4. Puedes usar la vista "form" (llenar campos con botones "Add new attribute") o cambiar a vista JSON (más rápido)
+5. Selecciona JSON y pega esto:
 
 ```
 {
   "clienteId": {"S": "C001"},
+  "nombre": {"S": "Carlos Ruiz"},
+  "ciudad": {"S": "Monterrey"}
+}
+```
+Repite el proceso con el siguiente item
+
+```
+{
+  "clienteId": {"S": "C002"},
   "nombre": {"S": "Ana Lopez"},
   "ciudad": {"S": "Puebla"}
 }
