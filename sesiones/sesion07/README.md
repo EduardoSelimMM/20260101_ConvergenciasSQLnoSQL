@@ -351,7 +351,7 @@ python3 generar-datos-para-dynamodb.py
 
 ## 1. Operaciones sobre TABLAS (estructura, no datos)
 
-### `create-table` para crear una tabla nueva
+### `create-table`: Crea una tabla nueva
 ```
 aws dynamodb create-table \
   --table-name Prueba \
@@ -360,7 +360,7 @@ aws dynamodb create-table \
   --billing-mode PAY_PER_REQUEST
 ```
 
-### list-tables — listar todas tus tablas
+### `list-tables`: Enlista todas las tablas
 ```bash
 aws dynamodb list-tables
 ```
