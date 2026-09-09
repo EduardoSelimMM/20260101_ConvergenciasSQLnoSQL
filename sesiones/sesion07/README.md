@@ -308,3 +308,39 @@ python3 generar-datos-para-dynamodb.py
 6. Verificar en AWS, DynamoDB → Tables → Clientes → Explore table items... y deberías ver 30 registros
 
 + En comparación con la sesión pasada que hicimos postgreSQL, ¿notan algo diferente?
+
++ A diferencia del script que usamos para postgreSQL, aquí no hay ningún bloque CONFIG con host/usuario/contraseña que editar
+
++ Sólo revisa que REGION = "us-east-1" coincida con tu región (ya viene así en el chunk que copiaste)
+
++ Aquí no necesitas ninguna contraseña de base de datos, porque DynamoDB se autentica con los mismos permisos de tu cuenta de AWS, no con usuario/contraseña propios
+
++ No creamos una instancia para la base de datos ni una instancia EC2
+
++ Pareciera que estamos creando una tabla así en el "vacío", sin que pertenezca a una "base de datos"
+
++ En DynamoDB no existe un paso separado de "crear la base de datos"
+
++ En PostgreSQL y MongoDB/DocumentDB, primero creabamos un servidor/instancia completo (RDS → Create database), y después, dentro de ese servidor, creabamos tablas. Eran dos pasos separados
+
++ En DynamoDB no hay ese primer paso
+
++ No existe un "servidor" que aprovisionar... vas directo a crear tablas, y cada tabla ya es, por sí misma, una base de datos independiente y funcional (administrada 100% por AWS, sin servidor visible)
+
++ En DynamoDB, "crear la tabla" es "crear la base de datos"... es el mismo paso!!!
+
++ La característica de servicio serverless de DynamoDB significa que no hay un "servidor" que administrar ni configurar
+
++ Por tanto, tampoco existe el concepto de "una base de datos que agrupa varias tablas"
+
++ Cada tabla es su propia unidad independiente, completa y autosuficiente
+
++ La tabla misma es la unidad equivalente a lo que antes llamábamos "una base de datos"
+
++ La pregunta que quizás te estás haciendo...
+
++ "¿Y si tengo 2 aplicaciones distintas y no quiero que se mezclen sus tablas?"
+
++ En DynamoDB, la forma de separarlos no es con una "base de datos" distinta, sino con nombres de tabla distintos o usando cuentas de AWS separadas
+
++ En DynamoDB, el diseño de tablas empieza preguntando "¿cómo voy a buscar esto?" antes de crear la tabla. A esto se le llama "diseño orientado a patrones de acceso"
