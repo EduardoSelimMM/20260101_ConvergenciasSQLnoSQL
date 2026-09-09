@@ -96,6 +96,10 @@ Repite el proceso con el siguiente item
 
 + **OJO:** También se pueden definir los items en formato "unmarshalled JSON", pero de eso hablaremos más adelante...
 
++ Hay un límite de tamaño. El tamaño máximo de un solo item es de 400 KB (incluyendo la longitud del nombre del atributo y el valor)
+
++ Salvo por los atributos que forman la clave primaria (partition key y opcionalmente sort key), dos items en la misma tabla pueden tener atributos completamente diferentes
+
 
 ```
 pip install faker
