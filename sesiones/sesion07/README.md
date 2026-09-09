@@ -1,5 +1,39 @@
 # Levantar base de datos DynamoDB
 
++ Antes de levantar la base, demos algunos detalles generales sobre DynamoDB
+
++ Entre las instrucciones se irán dando algunas otras características
+
++ **Amazon DynamoDB** es un servicio de base de datos **NoSQL** de tipo clave-valor totalmente administrado por AWS
+
++ Promete tener latencias de un solo dígito de milisegundo a cualquier escala
+
++ Escala horizontalmente de forma automática para manejar muchísimas peticiones por segundo sin degradación en el tiempo de respuesta
+
++ Es lo que se conoce como **serverless**... ¿a qué les suena?
+
++ Me gusta más decir que es totalmente administrada
+
++ Esto quiere que no requiere aprovisionar ni administrar servidores. AWS coordina el escalado, los parches de seguridad, las copias de seguridad, la replicación, etc.
+
++ Replica automáticamente los datos en al menos tres zonas de disponibilidad (AZs) dentro de una región AWS
+
++ Aunque inicialmente estaba pensada para estructuras de datos de clave-valor, esta estructura es tan flexible que se dice que también recibe documentos JSON
+
+## Modelo de datos básico
+
++ Items (elementos): Un registro dentro de la tabla (equivalente a una "fila" en SQL o un documento en MongoDB/DocumentDB
+
++ Tablas (tables): Colección de ítems
+
++ Atributos: Datos individuales asociados a un elemento (equivalente a un campo/columna).
+
++ Claves primarias: Es la característica definitoria (en mi opinión)
+
+	+ Existe un **partition key** (en formato HASH) que determina la partición física donde se almacena el elemento
+
+	+ Existe una **sort key** que, aunque es opcional, permite ordenar elementos dentro de la misma partición para realizar consultas por rangos
+
 ## Paso 1: Crear la tabla 'Clientes`
 
 1. Busca DynamoDB en la barra de búsqueda
