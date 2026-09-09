@@ -347,10 +347,12 @@ python3 generar-datos-para-dynamodb.py
 
 # Hagamos algunas consultas
 
++ Abre CloudShell
+
 ## 1. Operaciones sobre TABLAS (estructura, no datos)
 
-### create-table — crear una tabla nueva
-```bash
+### `create-table` para crear una tabla nueva
+```
 aws dynamodb create-table \
   --table-name Prueba \
   --attribute-definitions AttributeName=id,AttributeType=S \
