@@ -9,3 +9,5 @@
 ## Sesiones 
 - [Sesion 3: 1 de septiembre de 2026](./sesiones/sesion03)
 - [Sesion 5: 5 de septiembre de 2026](./sesiones/sesion05)
+- [Sesion 6: 8 de septiembre de 2026](./sesiones/sesion06)
+- [Sesion 7: 10 de septiembre de 2026](./sesiones/sesion07)
