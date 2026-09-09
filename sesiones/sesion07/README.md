@@ -93,6 +93,7 @@ Repite el proceso con el siguiente item
 }
 ```
 
++ **OJO:** También se pueden definir los items en formato "unmarshalled JSON", pero de eso hablaremos más adelante...
 
 
 ```
