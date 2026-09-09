@@ -396,3 +396,7 @@ python3 generar-datos-para-dynamodb.py
 + PartiQL no es lo suficientemente "inteligente" como para elegir un índice secundario cuando el WHERE filtra sobre la llave de ese índice
 
 	+ Se tiene que especificar directamente el índice secundario en la cláusula FROM para poder lograrlo
+
++ Hay PartiQL para Amazon Redshift, AWS TwinMaker, AWS Quantum Ledger DB... pero me vuelve a meter en arenas movedizas y se sale de mi área de experiencia
+
++ Cada implementación/motor/producto decide qué subconjunto del lenguaje completo va a soportar, según lo que su implementación/motor/producto puede ejecutar eficientemente
