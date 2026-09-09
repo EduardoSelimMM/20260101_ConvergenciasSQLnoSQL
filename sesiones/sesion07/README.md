@@ -344,3 +344,25 @@ python3 generar-datos-para-dynamodb.py
 + En DynamoDB, la forma de separarlos no es con una "base de datos" distinta, sino con nombres de tabla distintos o usando cuentas de AWS separadas
 
 + En DynamoDB, el diseño de tablas empieza preguntando "¿cómo voy a buscar esto?" antes de crear la tabla. A esto se le llama "diseño orientado a patrones de acceso"
+
+# "Convergencias" entre DynamoDB y SQL
+
++ PartiQL fue agregado en 2020, como una "capa de conveniencia" dado el capitalismo voraz... intentar darle poderes SQL a una base NoSQL
+
++ La forma "nativa" y original de DynamoDB desde el principio nunca fue un lenguaje de consultas tipo SQL, sino un conjunto de operaciones de API, cada una con su propio formato JSON
+
++ PartiQL no le agrega ninguna capacidad nueva a DynamoDB
+
++ Cuando Postgres agregó JSONB, sí ganó una capacidad real que no tenía antes: guardar y consultar estructuras flexibles con índices propios, funciones de extracción, y sigue pudiendo usar JOIN, GROUP BY, agregaciones SQL completas incluso sobre esos datos JSONB
+
++ PartiQL, en cambio, no le da a DynamoDB ninguna capacidad que no tuviera ya
+
++ Por debajo, cada SELECT de PartiQL se traduce exactamente a uno de los mismos 3 movimientos que ya se tenían desde antes de que existiera PartiQL: GetItem, Query, o Scan
+
++ PartiQL es puro maquillaje de sintaxis, cambia cómo se ve lo que escribes, no lo que la base de datos puede hacer
+
++ Entonces "forzar a DynamoDB a parecer SQL" es mucho más superficial que "forzar a postgreSQL a parecer MongoDB"
+
++ No estamos en arenas movedizas acá, pues no hay una tensión filosófica profunda
+
++ PartiQL no está intentando que DynamoDB haga cosas para las que no fue diseñado. Es sólo vocabulario distinto para las mismas operaciones limitadas de siempre
