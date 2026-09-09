@@ -531,12 +531,6 @@ aws dynamodb scan \
   --filter-expression "categoria = :cat" \
   --expression-attribute-values '{":cat": {"S": "Electrónica"}}'
 
-# --- boto3 ---
-# from boto3.dynamodb.conditions import Attr
-# tabla_productos = dynamodb.Table("Productos")
-# tabla_productos.scan(FilterExpression=Attr("categoria").eq("Electrónica"))
-
-
 ## ============================================================
 ## 4. Scan — pedidos por estado
 ## ============================================================
@@ -546,9 +540,6 @@ aws dynamodb scan \
   --table-name Pedidos \
   --filter-expression "estado = :e" \
   --expression-attribute-values '{":e": {"S": "pendiente"}}'
-
-# --- boto3 ---
-# tabla_pedidos.scan(FilterExpression=Attr("estado").eq("pendiente"))
 
 
 ## ============================================================
@@ -561,12 +552,6 @@ aws dynamodb scan \
   --filter-expression "preferencias.direccion.ciudad = :c" \
   --expression-attribute-values '{":c": {"S": "Guadalajara"}}'
 
-# --- boto3 ---
-# tabla_clientes.scan(
-#     FilterExpression=Attr("preferencias.direccion.ciudad").eq("Guadalajara")
-# )
-
-
 ## ============================================================
 ## 6. contains() — productos que tienen el tag "oferta"
 ## ============================================================
@@ -577,10 +562,6 @@ aws dynamodb scan \
   --filter-expression "contains(atributos.tags, :t)" \
   --expression-attribute-values '{":t": {"S": "oferta"}}'
 
-# --- boto3 ---
-# tabla_productos.scan(FilterExpression=Attr("atributos.tags").contains("oferta"))
-
-
 ## ============================================================
 ## 7. attribute_exists() — pedidos que sí tienen cupón con código
 ## ============================================================
@@ -589,10 +570,6 @@ aws dynamodb scan \
 aws dynamodb scan \
   --table-name Pedidos \
   --filter-expression "attribute_exists(metadata.cupon.codigo)"
-
-# --- boto3 ---
-# tabla_pedidos.scan(FilterExpression=Attr("metadata.cupon.codigo").exists())
-
 
 ## ============================================================
 ## 8. Ejemplo con ExpressionAttributeNames — cuando el campo choca
@@ -626,17 +603,6 @@ aws dynamodb put-item \
     }}
   }'
 
-# --- boto3 (¡nota que aquí NO se escriben los tipos! como ya vimos) ---
-# tabla_clientes.put_item(Item={
-#     "clienteId": "C999",
-#     "nombre": "Cliente de Prueba",
-#     "ciudad": "CDMX",
-#     "preferencias": {
-#         "newsletter": True,
-#         "categoriasFavoritas": ["Electrónica"]
-#     }
-# })
-
 
 ## ============================================================
 ## 10. UpdateItem — cambiar el stock de un producto
@@ -649,14 +615,6 @@ aws dynamodb update-item \
   --update-expression "SET stock = :s" \
   --expression-attribute-values '{":s": {"N": "0"}}'
 
-# --- boto3 ---
-# tabla_productos = dynamodb.Table("Productos")
-# tabla_productos.update_item(
-#     Key={"productoId": "P001"},
-#     UpdateExpression="SET stock = :s",
-#     ExpressionAttributeValues={":s": 0}
-# )
-
 
 ## ============================================================
 ## 11. DeleteItem — borrar el cliente de prueba
@@ -666,9 +624,6 @@ aws dynamodb update-item \
 aws dynamodb delete-item \
   --table-name Clientes \
   --key '{"clienteId": {"S": "C999"}}'
-
-# --- boto3 ---
-# tabla_clientes.delete_item(Key={"clienteId": "C999"})
 ```
 
 # "Convergencias" entre DynamoDB y SQL
