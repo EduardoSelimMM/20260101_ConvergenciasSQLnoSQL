@@ -12,9 +12,9 @@
 
 + Es lo que se conoce como **serverless**... ¿a qué les suena?
 
-+ Me gusta más decir que es totalmente administrada
++ Me gusta más decir que es **totalmente administrada**
 
-+ Esto quiere que no requiere aprovisionar ni administrar servidores. AWS coordina el escalado, los parches de seguridad, las copias de seguridad, la replicación, etc.
++ Esto quiere decir que no requiere aprovisionar ni administrar servidores. AWS coordina el escalado, los parches de seguridad, las copias de seguridad, la replicación, etc.
 
 + Replica automáticamente los datos en al menos tres zonas de disponibilidad (AZs) dentro de una región AWS
 
