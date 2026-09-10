@@ -520,77 +520,69 @@ aws dynamodb query \
   --expression-attribute-values '{":c": {"S": "C005"}}'
 ```
 
-```
-## ============================================================
-## 3. Scan con filtro — productos de una categoría
-## ============================================================
+## `scan` con filtro para productos de una categoría
 
-# --- AWS CLI ---
+```
 aws dynamodb scan \
   --table-name Productos \
   --filter-expression "categoria = :cat" \
   --expression-attribute-values '{":cat": {"S": "Electrónica"}}'
+```
 
-## ============================================================
-## 4. Scan — pedidos por estado
-## ============================================================
+## `scan` para pedidos por estado
 
-# --- AWS CLI ---
+```
 aws dynamodb scan \
   --table-name Pedidos \
   --filter-expression "estado = :e" \
   --expression-attribute-values '{":e": {"S": "pendiente"}}'
+```
 
+## Filtro sobre un atributo anidado (mapa dentro de mapa)
 
-## ============================================================
-## 5. Filtro sobre un atributo anidado (mapa dentro de mapa)
-## ============================================================
-
-# --- AWS CLI ---
+```
 aws dynamodb scan \
   --table-name Clientes \
   --filter-expression "preferencias.direccion.ciudad = :c" \
   --expression-attribute-values '{":c": {"S": "Guadalajara"}}'
+```
 
-## ============================================================
-## 6. contains() — productos que tienen el tag "oferta"
-## ============================================================
+## `contains()` para encontrar productos que tienen el tag "oferta"
 
-# --- AWS CLI ---
+```
 aws dynamodb scan \
   --table-name Productos \
   --filter-expression "contains(atributos.tags, :t)" \
   --expression-attribute-values '{":t": {"S": "oferta"}}'
+```
 
-## ============================================================
-## 7. attribute_exists() — pedidos que sí tienen cupón con código
-## ============================================================
+## `attribute_exists()` para pedidos que sí tienen cupón con código
 
-# --- AWS CLI ---
+```
 aws dynamodb scan \
   --table-name Pedidos \
   --filter-expression "attribute_exists(metadata.cupon.codigo)"
+```
 
-## ============================================================
-## 8. Ejemplo con ExpressionAttributeNames — cuando el campo choca
-## con una palabra reservada de DynamoDB (aquí NO nos pasa con
-## nuestros campos, pero es común con nombres como "status" o "size")
-## ============================================================
+## Ejemplo con `ExpressionAttributeNames`
 
-# Si tuvieras un campo llamado, por ejemplo, "status" en vez de "estado":
-# aws dynamodb scan \
++ Cuando el campo coincide con una palabra reservada de DynamoDB (aquí NO nos pasa con nuestros campos, pero es común con nombres como "status" o "size")
+
++ Si tuvieras un campo llamado, por ejemplo, "status" en vez de "estado"
+
+```
+aws dynamodb scan \
 #   --table-name Pedidos \
 #   --filter-expression "#s = :e" \
 #   --expression-attribute-names '{"#s": "status"}' \
 #   --expression-attribute-values '{":e": {"S": "pendiente"}}'
-# El "#s" es un alias que evita el choque con la palabra reservada.
+```
 
++ El "#s" es un alias que evita el choque con la palabra reservada
 
-## ============================================================
-## 9. PutItem — insertar un cliente nuevo
-## ============================================================
+## `PutItem` para insertar un cliente nuevo
 
-# --- AWS CLI ---
+```
 aws dynamodb put-item \
   --table-name Clientes \
   --item '{
@@ -602,25 +594,21 @@ aws dynamodb put-item \
       "categoriasFavoritas": {"L": [{"S": "Electrónica"}]}
     }}
   }'
+```
 
+## `UpdateItem` para cambiar el stock de un producto
 
-## ============================================================
-## 10. UpdateItem — cambiar el stock de un producto
-## ============================================================
-
-# --- AWS CLI ---
+```
 aws dynamodb update-item \
   --table-name Productos \
   --key '{"productoId": {"S": "P001"}}' \
   --update-expression "SET stock = :s" \
   --expression-attribute-values '{":s": {"N": "0"}}'
+```
 
+## `DeleteItem`para borrar el cliente de prueba
 
-## ============================================================
-## 11. DeleteItem — borrar el cliente de prueba
-## ============================================================
-
-# --- AWS CLI ---
+```
 aws dynamodb delete-item \
   --table-name Clientes \
   --key '{"clienteId": {"S": "C999"}}'
