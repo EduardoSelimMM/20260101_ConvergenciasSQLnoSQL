@@ -298,12 +298,13 @@ if __name__ == "__main__":
     main()
 ```
 
-4. Regresa a la terminal y pega crear el archivo .py a ejecutar
+4. Regresa a la terminal y crea el archivo .py a ejecutar mediante
 
 ```
 nano generar-datos-para-dynamodb.py
 ```
-y pega el contenido (Ctrl + O, Enter, Ctrl + X)
+
+y pega el contenido del chunk que copiaste antes. Dale Ctrl + O (para guardar), Enter (para confirmar), Ctrl + X (para salir del editor)
 
 5. En la línea de comando ejecuta el script python
 
