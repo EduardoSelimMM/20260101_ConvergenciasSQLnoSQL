@@ -12,6 +12,12 @@
 
 + Es lo que se conoce como **serverless**... ¿a qué les suena?
 
+	+ Así sin mucho pensar suena a "sin servidor"... esto puede dar una idea errónea de que no hay un servidor
+
+ 	+ Me gusta agregarle... "sin servidor **tuyo** (o de tu empresa/institución)" 
+
+	+ En realidad sí hay un servidor: El que pone AWS.
+
 + Me gusta más decir que es **totalmente administrada**... por AWS, no por tí
 
 + Esto quiere decir que no requiere aprovisionar ni administrar servidores. AWS coordina el escalado, los parches de seguridad, las copias de seguridad, la replicación, etc.
