@@ -32,6 +32,8 @@
 
 + 💔 No hay agregaciones `SUM`, `AVG`, `COUNT` de grupo, etc
 
+	+ Es decir, PartiQL es un lenguaje de CRUD, no un lenguaje de análisis... a pesar de que su sintaxis (`SELECT`) sugiere lo contrario y nos tienta a esperar el "poder completo" de SQL
+
 + 💔 No hay `CREATE TABLE`, `ALTER TABLE`
 
 + 💔 No hay `GROUP BY` ni `HAVING`
