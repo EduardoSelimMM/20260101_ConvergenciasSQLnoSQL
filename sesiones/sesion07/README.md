@@ -613,5 +613,3 @@ aws dynamodb delete-item \
   --table-name Clientes \
   --key '{"clienteId": {"S": "C999"}}'
 ```
-
-cto puede ejecutar eficientemente
