@@ -86,7 +86,7 @@ Repite el proceso con el siguiente item
   "Email": { "S": "alex@example.com" },
   "Age": { "N": "29" },
   "IsActive": { "BOOL": true },
-  "Roles": { "L": [ { "S": "admin" }, { "S": "developer" } ] },
+  "Roles": { "L": [ { "S": "admin" }, { "S": "developer" }, { "N": "189" } ] },
   "Category": {"SS": ["A", "B", "C"]},
   "Address": {
     "M": { "City": { "S": "CDMX" }, "ZipCode": { "N": "01000" } }
