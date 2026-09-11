@@ -315,7 +315,7 @@ python3 generar-datos-para-dynamodb.py
 
 + Aquí no necesitas ninguna contraseña de base de datos, porque DynamoDB se autentica con los mismos permisos de tu cuenta de AWS, no con usuario/contraseña propios
 
-+ No creamos una instancia para la base de datos ni una instancia EC2
++ **No creamos una instancia para la base de datos ni una instancia EC2**.... Esto significa ser serverless
 
 + Pareciera que estamos creando una tabla así en el "vacío", sin que pertenezca a una "base de datos"
 
