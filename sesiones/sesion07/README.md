@@ -622,7 +622,7 @@ aws dynamodb delete-item \
 | `query` | Quieres varios items que comparten partition key |
 | `scan` | Necesitas revisar/filtrar por un campo que no es la clave |
 | `put-item` | Quieres crear un item nuevo (o reemplazar uno existente por completo) |
-| `update-item` | Quieres cambiar solo 1-2 campos sin tocar el resto del item |
+| `update-item` | Quieres cambiar sólo 1-2 campos sin tocar el resto del item |
 | `delete-item` | Quieres borrar un item específico |
 | `batch-get-item` / `batch-write-item` | Necesitas leer/escribir varios items y quieres ahorrar llamadas |
 | `transact-write-items` | Varias escrituras deben tener éxito TODAS o NINGUNA |
