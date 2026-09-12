@@ -212,6 +212,7 @@ aws dynamodb execute-statement \
 | `campo IS NULL` | ¿El campo existe pero su valor es nulo? |
 | `campo IS MISSING` | ¿El campo ni siquiera existe en este ítem? |
 
+## PartiQL no puede hacer todo
 
 + 💔 No hay `JOIN`... cada consulta de PartiQL trabaja sobre una sola tabla, nunca combina varias.
 
