@@ -28,6 +28,76 @@
 
 + PartiQL no está intentando que DynamoDB haga cosas para las que no fue diseñado. Es sólo vocabulario distinto para las mismas operaciones limitadas de siempre
 
+---
+
+# Resumen: PartiQL para DynamoDB
+
+## 1. Las 4 sentencias DML (las acciones principales)
+
+| Sentencia | Qué hace | Ejemplo |
+|---|---|---|
+| `SELECT` | Leer ítems | `SELECT * FROM "Clientes" WHERE clienteId = 'C001'` |
+| `INSERT` | Crear un ítem nuevo | `INSERT INTO "Clientes" VALUE {'clienteId': 'C999', 'nombre': 'X'}` |
+| `UPDATE` | Modificar campos de un ítem existente | `UPDATE "Productos" SET stock = 0 WHERE productoId = 'P001'` |
+| `DELETE` | Borrar un ítem | `DELETE FROM "Clientes" WHERE clienteId = 'C999'` |
+
+## 2. Los 2 operadores de navegación (no son funciones, son símbolos)
+
+| Símbolo | Para qué sirve | Ejemplo |
+|---|---|---|
+| `.` | Entrar a un **Map** (objeto anidado) | `preferencias.direccion.ciudad` |
+| `[n]` | Entrar a una **List** (arreglo), por posición | `items[0].productoId` |
+
+## 3. Las funciones propias de PartiQL/DynamoDB
+
+| Función | Qué responde | Ejemplo |
+|---|---|---|
+| `attribute_exists(ruta)` | ¿Existe este campo? | `WHERE attribute_exists(metadata.cupon.codigo)` |
+| `attribute_not_exists(ruta)` | ¿NO existe este campo? | `WHERE attribute_not_exists(metadata.cupon)` |
+| `contains(lista, valor)` | ¿El arreglo/texto contiene este valor? | `WHERE contains(atributos.tags, 'oferta')` |
+| `begins_with(campo, texto)` | ¿El texto empieza así? (útil en sort keys) | `WHERE begins_with(pedidoId, 'O00')` |
+| `size(ruta)` | Tamaño de un arreglo, mapa, o string | `WHERE size(atributos.tags) > 1` |
+
+## 4. Los operadores de comparación (estos sí son como en SQL normal)
+
+```sql
+=   <>   <   <=   >   >=
+BETWEEN ... AND ...
+IN (...)
+AND   OR   NOT
+```
+
+## 5. Los 2 conceptos de "vacío" (la parte que no existe en SQL tradicional)
+
+| Expresión | Pregunta |
+|---|---|
+| `campo IS NULL` | ¿El campo existe pero su valor es nulo? |
+| `campo IS MISSING` | ¿El campo ni siquiera existe en este ítem? |
+
+## 6. Cómo apuntar a un índice secundario (GSI)
+
+```sql
+SELECT * FROM "Pedidos"."ClienteIndex" WHERE clienteId = 'C005'
+```
+`"Tabla"."NombreDelIndice"` — el único lugar donde ves 2 nombres entre comillas dobles seguidos.
+
+---
+
+## Lo que PartiQL NO tiene (para no buscarlo por error)
+
+`JOIN`, `GROUP BY`, `HAVING`, funciones de agregación (`SUM`, `COUNT`, `AVG`), subconsultas, y `ORDER BY` libre (solo funciona si ya filtras por partition key).
+
+## Las 3 formas de "empacar" cualquiera de estas consultas
+
+| Dónde escribes la consulta | Ejemplo |
+|---|---|
+| PartiQL editor (consola web) | Solo pegas el `SELECT`/`INSERT`/etc. directo |
+| AWS CLI | `aws dynamodb execute-statement --statement "..."` |
+| Varias sentencias en lote | `aws dynamodb batch-execute-statement --statements '[...]'` |
+
+
+---
+
 + 💔 No hay `JOIN`... cada consulta de PartiQL trabaja sobre una sola tabla, nunca combina varias.
 
 + 💔 No hay agregaciones `SUM`, `AVG`, `COUNT` de grupo, etc
