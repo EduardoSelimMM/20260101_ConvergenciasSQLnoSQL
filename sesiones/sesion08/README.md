@@ -8,6 +8,16 @@
 
 + Puedes utilizar PartiQL si no quieres trabajar directamente con `FilterExpressions`
 
+```
+aws dynamodb get-item --table-name Clientes --key '{"clienteId": {"S": "C001"}}'
+```
+
++ Esto ⬇️ es 100% PartiQL, PEEEEEERO no puedes meterle `filter-expression` de sintaxis nativa
+
+```
+aws dynamodb execute-statement --statement "SELECT * FROM \"Clientes\" WHERE clienteId = 'C001'"
+```
+
 + PartiQL fue agregado en 2020, como una "capa de conveniencia" dado el capitalismo voraz... intentar darle "poderes" SQL a una base NoSQL
 
 + La forma "nativa" y original de DynamoDB desde el principio nunca fue un lenguaje de consultas tipo SQL, sino un conjunto de operaciones de API, cada una con su propio formato JSON
