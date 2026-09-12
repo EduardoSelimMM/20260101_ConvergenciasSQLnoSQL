@@ -257,3 +257,59 @@ aws dynamodb execute-transaction \
     {"Statement": "UPDATE \"Productos\" SET stock = stock - 1 WHERE productoId = '"'"'P001'"'"'"}
   ]'
 ```
+### PartiQL editor
+
++ Hay un editor para tirar código PartiQL
+
+```
+SELECT * FROM "Clientes";
+
+
+SELECT * FROM "Clientes" WHERE clienteId = 'C001';
+
+
+SELECT * FROM "Pedidos"."ClienteIndex" WHERE clienteId = 'C005';
+
+
+SELECT * FROM "Productos" WHERE categoria = 'Electrónica';
+
+
+SELECT * FROM "Pedidos" WHERE estado = 'pendiente';
+
+
+SELECT nombre, preferencias.direccion.ciudad
+FROM "Clientes"
+WHERE clienteId = 'C001';
+
+
+SELECT items[0].productoId, items[0].cantidad
+FROM "Pedidos"
+WHERE pedidoId = 'O001';
+
+
+SELECT nombre
+FROM "Productos"
+WHERE contains(atributos.tags, 'oferta');
+
+
+SELECT pedidoId
+FROM "Pedidos"
+WHERE attribute_exists(metadata.cupon.codigo);
+
+
+INSERT INTO "Clientes"
+VALUE {
+    'clienteId': 'C999',
+    'nombre': 'Cliente de Prueba',
+    'ciudad': 'CDMX'
+};
+ 
+
+UPDATE "Productos"
+SET stock = 0
+WHERE productoId = 'P001';
+ 
+
+DELETE FROM "Clientes"
+WHERE clienteId = 'C999';
+```
