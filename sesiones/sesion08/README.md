@@ -1,3 +1,5 @@
++ Las 11 operaciones básicas create-table, list-tables, describe-table, delete-table, update-table, put-item, get-item, update-item, delete-item, query, scan son las que hay que aprenderse para trabajo normal del día a día
+
 # "Convergencias" entre DynamoDB y SQL
 
 + PartiQL es un lenguaje de consulta compatible con SQL que facilita la consulta eficiente de datos en DynamoDB mediante las sentencias DML (Data Manipulation Language) `SELECT`, `INSERT`, `UPDATE` y `DELETE`, i.e. manipular datos dentro de una estructura ya existente
