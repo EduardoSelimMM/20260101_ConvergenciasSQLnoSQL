@@ -58,12 +58,16 @@ IN (...)
 AND   OR   NOT
 ```
 
-+ Además hay 2 operadores de navegación (**OJO:** No son funciones, son símbolos)
++ Además hay do operadores de navegación (**OJO:** No son funciones, son símbolos)
 
 | Símbolo | Para qué sirve | Ejemplo |
 |---|---|---|
 | `.` | Entrar a un **Map** (objeto anidado) | `preferencias.direccion.ciudad` |
 | `[n]` | Entrar a una **List** (arreglo), por posición | `items[0].productoId` |
+
++ Se usa la misma lógica que en JavaScript o Python: objeto.propiedad para diccionarios, lista[0] para arreglos por posición.
+	+ `.` (punto) → para entrar a un mapa (un objeto anidado, como preferencias o metadata)
+ 	+ `[]` (corchetes cuadrados con un número) → para entrar a una lista (un arreglo, como items o tags)
 
 + 🚨🚨 **Importante:** 🚨🚨 No son operaciones "nuevas" que antes no se hayan podido hacer nativamente en DynamoDB
 
