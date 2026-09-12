@@ -63,7 +63,109 @@ AND   OR   NOT
 | `begins_with(campo, texto)` | ¿El texto empieza así? (útil en sort keys) | `WHERE begins_with(pedidoId, 'O00')` |
 | `size(ruta)` | Tamaño de un arreglo, mapa, o string | `WHERE size(atributos.tags) > 1` |
 
+## Veamos unos ejemplitos
 
+### 1. Traer TODOS los clientes
+```
+aws dynamodb execute-statement \
+  --statement "SELECT * FROM \"Clientes\""
+```
+
+### 2. Traer un cliente exacto por su llave (GetItem por debajo)
+```
+aws dynamodb execute-statement \
+  --statement "SELECT * FROM \"Clientes\" WHERE clienteId = 'C001'"
+```
+
+### 3. Query eficiente usando el índice ClienteIndex — pedidos de un cliente
+```
+aws dynamodb execute-statement \
+  --statement "SELECT * FROM \"Pedidos\".\"ClienteIndex\" WHERE clienteId = 'C005'"
+```
+
+### 4. Scan con filtro — productos de una categoría
+```
+aws dynamodb execute-statement \
+  --statement "SELECT * FROM \"Productos\" WHERE categoria = 'Electrónica'"
+```
+
+### 5. Scan — pedidos por estado
+```
+aws dynamodb execute-statement \
+  --statement "SELECT * FROM \"Pedidos\" WHERE estado = 'pendiente'"
+```
+
+### 6. Atributo anidado (mapa dentro de mapa)
+```
+aws dynamodb execute-statement \
+  --statement "
+    SELECT nombre, preferencias.direccion.ciudad
+    FROM \"Clientes\"
+    WHERE clienteId = 'C001'
+  "
+```
+
+### 7. Elemento de una lista (el primer producto dentro de un pedido)
+```
+aws dynamodb execute-statement \
+  --statement "
+    SELECT items[0].productoId, items[0].cantidad
+    FROM \"Pedidos\"
+    WHERE pedidoId = 'O001'
+  "
+```
+
+### 8. Función contains() — productos con el tag "oferta"
+```
+aws dynamodb execute-statement \
+  --statement "
+    SELECT nombre
+    FROM \"Productos\"
+    WHERE contains(atributos.tags, 'oferta')
+  "
+```
+
+### 9. Función attribute_exists() — pedidos que sí tienen cupón
+```
+aws dynamodb execute-statement \
+  --statement "
+    SELECT pedidoId
+    FROM \"Pedidos\"
+    WHERE attribute_exists(metadata.cupon.codigo)
+  "
+```
+
+### 10. Insertar un cliente nuevo
+```
+aws dynamodb execute-statement \
+  --statement "
+    INSERT INTO \"Clientes\"
+    VALUE {
+      'clienteId': 'C999',
+      'nombre': 'Cliente CLI',
+      'ciudad': 'CDMX'
+    }
+  "
+```
+
+### 11. Actualizar el stock de un producto
+```
+aws dynamodb execute-statement \
+  --statement "
+    UPDATE \"Productos\"
+    SET stock = 0
+    WHERE productoId = 'P001'
+  "
+```
+
+### 12. Borrar el cliente de prueba que insertamos en el paso 10
+```
+aws dynamodb execute-statement \
+  --statement "
+    DELETE FROM \"Clientes\"
+    WHERE clienteId = 'C999'
+  "
+```
 
 
 + 💔 No hay `JOIN`... cada consulta de PartiQL trabaja sobre una sola tabla, nunca combina varias.
