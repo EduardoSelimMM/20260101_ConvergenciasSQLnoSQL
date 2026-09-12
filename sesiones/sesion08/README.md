@@ -65,31 +65,37 @@ AND   OR   NOT
 
 ## Veamos unos ejemplitos
 
-### 1. Traer TODOS los clientes
+### Traer todos los clientes
 ```
 aws dynamodb execute-statement \
   --statement "SELECT * FROM \"Clientes\""
 ```
 
-### 2. Traer un cliente exacto por su llave (GetItem por debajo)
+### Traer un cliente exacto por su llave (GetItem por debajo)
 ```
 aws dynamodb execute-statement \
   --statement "SELECT * FROM \"Clientes\" WHERE clienteId = 'C001'"
 ```
 
-### 3. Query eficiente usando el índice ClienteIndex — pedidos de un cliente
+### Query eficiente usando el índice ClienteIndex
+
++ Por ejemplo, los pedidos de un cliente
 ```
 aws dynamodb execute-statement \
   --statement "SELECT * FROM \"Pedidos\".\"ClienteIndex\" WHERE clienteId = 'C005'"
 ```
 
-### 4. Scan con filtro — productos de una categoría
+### 4. Scan con filtro
+
++ Por ejemplo, productos de una categoría
 ```
 aws dynamodb execute-statement \
   --statement "SELECT * FROM \"Productos\" WHERE categoria = 'Electrónica'"
 ```
 
-### 5. Scan — pedidos por estado
+### 5. Scan
+
++ Por ejemplo, pedidos por estado
 ```
 aws dynamodb execute-statement \
   --statement "SELECT * FROM \"Pedidos\" WHERE estado = 'pendiente'"
@@ -105,7 +111,9 @@ aws dynamodb execute-statement \
   "
 ```
 
-### 7. Elemento de una lista (el primer producto dentro de un pedido)
+### 7. Elemento de una lista
+
++ Por ejemplo, el primer producto dentro de un pedido
 ```
 aws dynamodb execute-statement \
   --statement "
@@ -115,7 +123,9 @@ aws dynamodb execute-statement \
   "
 ```
 
-### 8. Función contains() — productos con el tag "oferta"
+### 8. Función contains()
+
++ Por ejemplo, productos con el tag "oferta"
 ```
 aws dynamodb execute-statement \
   --statement "
@@ -125,7 +135,9 @@ aws dynamodb execute-statement \
   "
 ```
 
-### 9. Función attribute_exists() — pedidos que sí tienen cupón
+### 9. Función attribute_exists()
+
++ Por ejemplo, pedidos que sí tienen cupón
 ```
 aws dynamodb execute-statement \
   --statement "
