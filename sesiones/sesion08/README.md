@@ -235,3 +235,23 @@ aws dynamodb execute-statement \
 + Hay PartiQL para Amazon Redshift, AWS TwinMaker, AWS Quantum Ledger DB... pero me vuelve a meter en arenas movedizas y se sale de mi área de experiencia
 
 + Cada implementación/motor/producto decide qué subconjunto del lenguaje completo va a soportar, según lo que su implementación/motor/producto puede ejecutar eficientemente
+
++ Donde la cosa ya se vuelve un mounstro (en mi opinión)
+
++ Varias sentencias PartiQL en una sola llamada
+
+```
+aws dynamodb batch-execute-statement \
+  --statements '[
+    {"Statement": "SELECT * FROM \"Clientes\" WHERE clienteId = '"'"'C001'"'"'"},
+    {"Statement": "SELECT * FROM \"Productos\" WHERE productoId = '"'"'P001'"'"'"}
+  ]'
+```
+ + Varias sentencias PartiQL como transacción (todas o ninguna)
+
+```
+aws dynamodb execute-transaction \
+  --transact-statements '[
+    {"Statement": "UPDATE \"Productos\" SET stock = stock - 1 WHERE productoId = '"'"'P001'"'"'"}
+  ]'
+```
