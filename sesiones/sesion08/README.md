@@ -179,6 +179,24 @@ aws dynamodb execute-statement \
   "
 ```
 
+### ¿Cómo apuntar a un índice secundario?
+
+```
+aws dynamodb execute-statement \
+  --statement "
+	SELECT * FROM "Pedidos"."ClienteIndex" WHERE clienteId = 'C005'
+  "
+```
+
++ Acá hay dos nociones de "vacío"
+
+| Expresión | Pregunta |
+|---|---|
+| `campo IS NULL` | ¿El campo existe pero su valor es nulo? |
+| `campo IS MISSING` | ¿El campo ni siquiera existe en este ítem? |
+
+
++ 👀**OJO:**👀 Ver sintaxis de la forma `"Tabla"."NombreDelIndice"`.... hay dos nombres entre comillas dobles seguidos
 
 + 💔 No hay `JOIN`... cada consulta de PartiQL trabaja sobre una sola tabla, nunca combina varias.
 
