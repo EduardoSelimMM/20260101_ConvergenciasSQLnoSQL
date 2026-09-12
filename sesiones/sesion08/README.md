@@ -85,7 +85,7 @@ aws dynamodb execute-statement \
   --statement "SELECT * FROM \"Pedidos\".\"ClienteIndex\" WHERE clienteId = 'C005'"
 ```
 
-### 4. Scan con filtro
+### Scan con filtro
 
 + Por ejemplo, productos de una categoría
 ```
@@ -93,7 +93,7 @@ aws dynamodb execute-statement \
   --statement "SELECT * FROM \"Productos\" WHERE categoria = 'Electrónica'"
 ```
 
-### 5. Scan
+### Scan
 
 + Por ejemplo, pedidos por estado
 ```
@@ -101,7 +101,7 @@ aws dynamodb execute-statement \
   --statement "SELECT * FROM \"Pedidos\" WHERE estado = 'pendiente'"
 ```
 
-### 6. Atributo anidado (mapa dentro de mapa)
+### Atributo anidado (mapa dentro de mapa)
 ```
 aws dynamodb execute-statement \
   --statement "
@@ -111,7 +111,7 @@ aws dynamodb execute-statement \
   "
 ```
 
-### 7. Elemento de una lista
+### Elemento de una lista
 
 + Por ejemplo, el primer producto dentro de un pedido
 ```
@@ -123,7 +123,7 @@ aws dynamodb execute-statement \
   "
 ```
 
-### 8. Función contains()
+### Función contains()
 
 + Por ejemplo, productos con el tag "oferta"
 ```
@@ -135,7 +135,7 @@ aws dynamodb execute-statement \
   "
 ```
 
-### 9. Función attribute_exists()
+### Función attribute_exists()
 
 + Por ejemplo, pedidos que sí tienen cupón
 ```
@@ -147,7 +147,7 @@ aws dynamodb execute-statement \
   "
 ```
 
-### 10. Insertar un cliente nuevo
+### Insertar un cliente nuevo
 ```
 aws dynamodb execute-statement \
   --statement "
@@ -160,7 +160,7 @@ aws dynamodb execute-statement \
   "
 ```
 
-### 11. Actualizar el stock de un producto
+### Actualizar el stock de un producto
 ```
 aws dynamodb execute-statement \
   --statement "
@@ -170,7 +170,7 @@ aws dynamodb execute-statement \
   "
 ```
 
-### 12. Borrar el cliente de prueba que insertamos en el paso 10
+### Borrar el cliente de prueba que insertamos en el paso 10
 ```
 aws dynamodb execute-statement \
   --statement "
